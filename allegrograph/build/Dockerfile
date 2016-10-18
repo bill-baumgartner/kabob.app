@@ -19,8 +19,6 @@ COPY config/user-env.sh config/update-agraph-cfg.sh /config/
 RUN chmod 755 /config/update-agraph-cfg.sh && \
     /config/update-agraph-cfg.sh
 
-EXPOSE 10036
-
 # start AG
 CMD /app/agraph/bin/agraph-control --config /config/agraph.cfg start \
     && tail -f /data/log/agraph.log
