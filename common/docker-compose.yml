@@ -1,0 +1,16 @@
+version: '2'
+
+volumes:
+
+  # /kabob_data stores downloaded data sources and generated ICE RDF
+  # as well as output from the KaBOB forward-chaining rule machinery.
+  - kabob_data:
+    driver: local
+
+services:
+
+  kabob:
+    image: ccp/kabob-base:0.1
+    volumes:
+      - kabob_data:/kabob_data
+  
