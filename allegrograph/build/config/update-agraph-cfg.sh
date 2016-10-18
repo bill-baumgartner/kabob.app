@@ -9,3 +9,4 @@
 source /config/user-env.sh
 content=$(cat /app/agraph/etc/agraph.cfg)
 echo -en "$AG_LICENSE_HEADER\n$content" > /config/agraph.cfg
+sed -i 's/Port 10035/Port $PLATFORM_ALLEGROGRAPH_PORT/g' /config/agraph.cfg

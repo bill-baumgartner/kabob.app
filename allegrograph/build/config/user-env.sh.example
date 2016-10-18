@@ -3,15 +3,19 @@
 # This is an example file. When building a KaBOB instance, make a copy
 # of this file in this same directory with the .example suffix
 # removed. Please add your AllegroGraph license header to the
-# user-env.sh file and update the KB name if desired, then save. KaBOB
-# cannot be built without a license because the default triple limit
-# is too small.
+# user-env.sh file and optionally update the KB name and port, then
+# save. KaBOB cannot be built without a license because the default
+# triple limit is too small.
 # 
 
 # The name of the KB instance to create
 export KB_INSTANCE_NAME=kabob-human
 
+# The port used by AllegroGraph
+export PLATFORM_ALLEGROGRAPH_PORT=10035
+
 # Add your AllegroGraph license header below. KaBOB cannot be built 
 # without a license because the default triple limit is too small.
 export AG_LICENSE_HEADER="Licensee ..."
+
 
