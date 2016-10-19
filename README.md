@@ -62,6 +62,7 @@ This project facilitates the installation and construction of a KaBOB instance v
 8. Build the Docker image (this will import the AllegroGraph Docker image): 
 
    ```sh
+   cd kabob.app.git
    docker build -t ccp/agraph:v6.1.1 allegrograph/build/
    ```
 9. Populate two Docker volumes with required code:
