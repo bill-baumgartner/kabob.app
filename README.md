@@ -18,6 +18,7 @@ This project facilitates the installation and construction of a KaBOB instance v
 ### Initial setup
 1. Install [Docker](https://www.docker.com/) on the machine that will host KaBOB
 2. Download this repository: 
+
    ```sh
    git clone https://github.com/bill-baumgartner/kabob.app ./kabob.app.git
    ```
