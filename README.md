@@ -39,5 +39,7 @@ Run: `scripts/step2_ag-setup.sh`
 
 ### BUILD STEP 3: Build KaBOB
 Run: `scripts/step3_build-kabob.sh`
+
+   > Building the human KaBOB instance should take ~100 minutes.
    
    
