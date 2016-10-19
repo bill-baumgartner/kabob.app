@@ -19,7 +19,9 @@ COPY config/user-env.sh config/update-agraph-cfg.sh /config/
 RUN chmod 755 /config/update-agraph-cfg.sh && \
     /config/update-agraph-cfg.sh && \
     touch /agload.log && \
-    chown agraph /agload.log
+    chown agraph /agload.log && \
+    touch /agquery.log && \
+    chown agraph /agquery.log
 
 # start AG
 CMD /app/agraph/bin/agraph-control --config /config/agraph.cfg start \
