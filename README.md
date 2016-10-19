@@ -28,14 +28,17 @@ This project facilitates the installation and construction of a KaBOB instance v
 
 ### Download datasources and generate RDF
 4. Create a Docker volume where the downloaded data files and generated RDF will be stored: 
+
    ```sh
    docker create -v /kabob_data --name kabob_data ubuntu:latest
    ```
 5. Initial setup (downloads ontologies used by KaBOB): 
+
    ```sh
    docker run --rm --volumes-from kabob_data ccp/kabob-base:0.1 ./setup.sh
    ```
 6. Create data source RDF (downloads and processes publicly available databases). If the KaBOB host machine is a Unix-based OS, then run `kabob.app.git/scripts/human-ice-rdf-gen.sh`. Note, this script spins up five Docker containers to download and process data sources. Doing so will consume at least 5 cores, so make sure the host machine is capable. If you are on a non-Unix machine, then you will need to execute the following 5 Docker commands and wait for them to complete:
+
    ```sh
    docker run -d --name "rdf_gen_1" --volumes-from kabob_data ccp/kabob-base:0.1 ./ice-rdf-gen.sh "-t 9606" "HGNC,NCBIGENE_GENEINFO,NCBIGENE_REFSEQUNIPROTCOLLAB,GOA_HUMAN,HP_ANNOTATIONS_ALL_SOURCES" "1"
    
@@ -52,20 +55,24 @@ This project facilitates the installation and construction of a KaBOB instance v
 
 ### Setup and start AllegroGraph
 7. Create a Docker volume where AllegroGraph will store its data: 
+
    ```sh
    docker create --name agraph-data franzinc/agraph-data
    ```
 8. Build the Docker image (this will import the AllegroGraph Docker image): 
+
    ```sh
    docker build -t ccp/agraph:v6.1.1 allegrograph/build/
    ```
 9. Populate two Docker volumes with required code:
+
    ```sh
    docker run --rm -v $(pwd):/backup ccp/kabob-base:0.1 tar czvf /backup/kabob.git-backup.tar.gz /kabob.git
    docker create -v /kabob.git --name kabob.git ubuntu:latest
    docker run --rm --volumes-from kabob.git -v $(pwd):/backup ubuntu:latest bash -c "cd /kabob.git && tar xzvf /backup/kabob.git-backup.tar.gz --strip 1"
    rm kabob.git-backup.tar.gz
    ```
+
    ```sh
    docker run --rm -v $(pwd):/backup ccp/kabob-base:0.1 tar czvf /backup/m2-backup.tar.gz /root/.m2
    docker create -v /root/.m2 --name m2 ubuntu:latest
@@ -73,6 +80,7 @@ This project facilitates the installation and construction of a KaBOB instance v
    rm m2-backup.tar.gz
    ```
 10. Start up AllegroGraph
+
     ```sh
     docker run -d -p 10000-10035:10000-10035 \
     --volumes-from agraph-data --volumes-from kabob_data --volumes-from kabob.git --volumes-from m2 \
@@ -82,6 +90,7 @@ This project facilitates the installation and construction of a KaBOB instance v
 
 ### Build KaBOB
 11. Build KaBOB using the RDF generated from downloaded data sources:
+
     ```sh
     docker exec agraph bash -c "/kabob.git/scripts/docker/build-from-scratch.sh"
     ```
