@@ -17,7 +17,9 @@ COPY config/user-env.sh config/update-agraph-cfg.sh /config/
 
 # create the agraph.cfg file with the user-supplied license header
 RUN chmod 755 /config/update-agraph-cfg.sh && \
-    /config/update-agraph-cfg.sh
+    /config/update-agraph-cfg.sh && \
+    touch /agload.log && \
+    chown agraph /agload.log
 
 # start AG
 CMD /app/agraph/bin/agraph-control --config /config/agraph.cfg start \
