@@ -20,7 +20,7 @@ COUNTER=1
 for ds in "${DATASOURCES[@]}"
 do
     echo "Starting kabob-base container to process: $ds"
-    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data ccp/kabob-base:0.1 ./ice-rdf-gen.sh "$TAX" "$ds" "$COUNTER"`
+    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data billbaumgartner/kabob-base:0.1 ./ice-rdf-gen.sh "$TAX" "$ds" "$COUNTER"`
     COUNTER=$((COUNTER + 1))
 done
 docker wait $DID
