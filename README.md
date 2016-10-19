@@ -34,24 +34,16 @@ This project facilitates the installation and construction of a KaBOB instance v
     ```
 
 ### BUILD STEP 1: Download datasources and generate RDF
-Run:
-   ```sh
-   scripts/step1_rdf-gen.sh
-   ```
+Run: `scripts/step1_rdf-gen.sh`
+
    > Note, this script spins up five Docker containers to download and process data sources. Doing so will consume at least 5 cores, so make sure the host machine is capable or adjust accordingly.
 
 ### BUILD STEP 2: Setup and start AllegroGraph
-Run: 
-   ```sh
-   scripts/step2_ag-setup.sh
-   ```
+Run: `scripts/step2_ag-setup.sh`
 
    > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB.
 
 ### BUILD STEP 3: Build KaBOB
-Run:
-   ```sh
-   scripts/step3_build-kabob.sh
-   ```
+Run: `scripts/step3_build-kabob.sh`
    
    
