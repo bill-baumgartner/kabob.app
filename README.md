@@ -25,13 +25,7 @@ This project facilitates the installation and construction of a KaBOB instance v
    ```
 3. Follow the instructions in `kabob.app.git/allegrograph/build/config/user-env.sh.example` to create a `user-env.sh` file with your AllegroGraph license.
 
-   > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands.
-
-   > All scripts should be run from the base directory of the project:
-
-    ```sh
-    cd kabob.app.git
-    ```
+   > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands. All scripts should be run from the base directory of the project: `cd kabob.app.git`
 
 ### BUILD STEP 1: Download datasources and generate RDF
 Run: `scripts/step1_rdf-gen.sh`
