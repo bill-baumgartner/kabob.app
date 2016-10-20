@@ -35,7 +35,7 @@ Run: `scripts/step1_rdf-gen.sh`
 ### BUILD STEP 2: Setup and start AllegroGraph
 Run: `scripts/step2_ag-setup.sh`
 
-   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB.
+   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB. Access credentials for logging into AllegroGraph can be found in the [default AllegroGraph configuration file](https://github.com/franzinc/docker-agraph/blob/master/agraph.cfg) (See the SuperUser line).
 
 ### BUILD STEP 3: Build KaBOB
 Run: `scripts/step3_build-kabob.sh`
