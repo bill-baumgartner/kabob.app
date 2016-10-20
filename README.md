@@ -30,7 +30,7 @@ This project facilitates the installation and construction of a KaBOB instance v
 ### BUILD STEP 1: Download datasources and generate RDF
 Run: `scripts/step1_rdf-gen.sh`
 
-   > Note, this script spins up five Docker containers to download and process data sources. Doing so will consume at least 5 cores, so make sure the host machine is capable or adjust accordingly.
+   > This step may take >90 min. Note, this script spins up five Docker containers to download and process data sources. Doing so will consume at least 5 cores, so make sure the host machine is capable or adjust accordingly.
 
 ### BUILD STEP 2: Setup and start AllegroGraph
 Run: `scripts/step2_ag-setup.sh`
