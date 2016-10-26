@@ -9,27 +9,46 @@ if ! [[ -e README.md ]]; then
     exit 1
 fi
 
+# make sure the $PLATFORM_ALLEGROGRAPH_PORT environment variable is set
 source allegrograph/build/config/user-env.sh
+
+# Create and commit an image based on franzinc/agraph:v6.1.1 that has
+# Transparent Hugepages (THP) disabled. As noted in the AllegroGraph
+# documentation, THP can result in poor AllegroGraph performance:
+# http://franz.com/agraph/support/documentation/current/performance-tuning.html#header3-18
+#
+# --cap-add=SYS_ADMIN is required in order to make /sys writeable
+# after THP has been disabled, /sys is made read-only once again
+docker run -d --cap-add=SYS_ADMIN --name agraph franzinc/agraph:v6.1.1
+docker exec agraph  /bin/bash -c "yum install -y mount;
+                                  mount -o remount,rw /sys ; 
+                                  echo never > /sys/kernel/mm/transparent_hugepage/enabled ;
+                                  echo never > /sys/kernel/mm/transparent_hugepage/defrag ;
+                                  mount -o remount,ro /sys;
+                                  /app/agraph/bin/agraph-control --config /app/agraph/etc/agraph.cfg stop"
+# commit a new image with THP disabled
+docker commit agraph franzinc/agraph:v6.1.1.THP_disabled
+docker stop agraph
+docker rm agraph
 
 # Create a Docker volume where AllegroGraph will store its data: 
 docker create --name agraph-data franzinc/agraph-data
 
+# Create a Docker volume where load requests can be placed
+docker create -v /ag-load-requests --name ag-load-requests ubuntu:latest
+
 # Build the Docker image (this will import the AllegroGraph Docker image): 
 docker build -t ccp/agraph:v6.1.1 allegrograph/build/
 
-# Populate two Docker volumes and populate with required code:
-docker run --rm -v $(pwd):/backup billbaumgartner/kabob-base:0.1 tar czvf /backup/kabob.git-backup.tar.gz /kabob.git
-docker create -v /kabob.git --name kabob.git ubuntu:latest
-docker run --rm --volumes-from kabob.git -v $(pwd):/backup ubuntu:latest bash -c "cd /kabob.git && tar xzvf /backup/kabob.git-backup.tar.gz --strip 1"
-rm -f kabob.git-backup.tar.gz
+# Create a dedicated network so that other containers can talk to the agraph container
+docker network create agraph-net
 
-docker run --rm -v $(pwd):/backup billbaumgartner/kabob-base:0.1 tar czvf /backup/m2-backup.tar.gz /root/.m2
-docker create -v /root/.m2 --name m2 ubuntu:latest
-docker run --rm --volumes-from m2 -v $(pwd):/backup ubuntu bash -c "cd /root/.m2 && tar xzvf /backup/m2-backup.tar.gz --strip 2"
-rm -f m2-backup.tar.gz
-
-# Start up AllegroGraph
+# Start up AllegroGraph; monit port is 2812
 docker run -d -p 10000-$PLATFORM_ALLEGROGRAPH_PORT:10000-$PLATFORM_ALLEGROGRAPH_PORT \
-   --volumes-from agraph-data --volumes-from kabob_data --volumes-from kabob.git --volumes-from m2 \
-   --name agraph ccp/agraph:v6.1.1
+       --net agraph-net \
+       --volumes-from agraph-data --volumes-from kabob_data --volumes-from ag-load-requests \
+       --name agraph ccp/agraph:v6.1.1
+
+# Log the AllegroGraph port to the ag-load-requests directory
+docker exec agraph /bin/bash -c "echo $PLATFORM_ALLEGROGRAPH_PORT > /ag-load-requests/agraph.port"
 
