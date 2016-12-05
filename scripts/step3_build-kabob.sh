@@ -10,4 +10,4 @@ if ! [[ -e README.md ]]; then
 fi
 
 # Build KaBOB using the RDF generated from downloaded data sources:
-docker run --rm --net agraph-net --volumes-from kabob_data --volumes-from ag-load-requests billbaumgartner/kabob-base:0.1 /kabob.git/scripts/docker/build-from-scratch.sh $1
+docker run --rm --net agraph-net --volumes-from kabob_data --volumes-from ag-load-requests billbaumgartner/kabob-base:0.2 /kabob.git/scripts/docker/build-from-scratch.sh $1

@@ -15,7 +15,7 @@ fi
 docker create -v /kabob_data --name kabob_data ubuntu:latest
 
 #  Initial setup (downloads ontologies used by KaBOB): 
-docker run --rm --volumes-from kabob_data billbaumgartner/kabob-base:0.1 ./setup.sh
+docker run --rm --volumes-from kabob_data billbaumgartner/kabob-base:0.2 ./setup.sh
 
 
 # Create data source RDF (downloads and processes publicly available databases).
