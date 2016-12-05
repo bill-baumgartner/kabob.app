@@ -21,7 +21,7 @@ This project facilitates the installation and construction of a KaBOB instance v
 2. Download this repository: 
 
    ```sh
-   git clone https://github.com/bill-baumgartner/kabob.app ./kabob.app.git
+   git clone --branch v0.2 https://github.com/bill-baumgartner/kabob.app ./kabob.app.git
    ```
 3. Follow the instructions in `kabob.app.git/allegrograph/build/config/user-env.sh.example` to create a `user-env.sh` file with your AllegroGraph license.
 
