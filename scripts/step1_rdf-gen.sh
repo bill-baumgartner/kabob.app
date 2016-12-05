@@ -2,8 +2,10 @@
 
 #
 # Download datasources and generate RDF. Note that this script spins
-# up 5 docker containers to download and process the data
-# sources. Make sure your machine is capable or adjust accordingly.
+# up 1-5 docker containers to download and process the data
+# sources. The single input parameter indicates the number of
+# docker containers to use (and should be no more than the number
+# of available cores on your machine).
 #
 
 if ! [[ -e README.md ]]; then
@@ -20,4 +22,4 @@ docker run --rm --volumes-from kabob_data billbaumgartner/kabob-base:0.2 ./setup
 
 # Create data source RDF (downloads and processes publicly available databases).
 chmod 755 scripts/human-ice-rdf-gen.sh
-scripts/human-ice-rdf-gen.sh
+scripts/human-ice-rdf-gen.sh $1

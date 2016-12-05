@@ -28,9 +28,9 @@ This project facilitates the installation and construction of a KaBOB instance v
    > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands. All scripts should be run from the base directory of the project: `cd kabob.app.git`
 
 ### BUILD STEP 1: Download datasources and generate RDF
-Run: `scripts/step1_rdf-gen.sh`
+Run: `scripts/step1_rdf-gen.sh _n_` where _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine. 
 
-   > This step may take >90 min. Note, this script spins up five Docker containers to download and process data sources. Doing so will consume at least 5 cores, so make sure the host machine is capable or adjust accordingly.
+   > This step may take >90 min.
 
 ### BUILD STEP 2: Setup and start AllegroGraph
 Run: `scripts/step2_ag-setup.sh`
