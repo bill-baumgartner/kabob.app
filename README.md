@@ -42,6 +42,6 @@ Run: `scripts/step2_ag-setup.sh`
 ### BUILD STEP 3: Build KaBOB
 Run: `scripts/step3_build-kabob.sh`
 
-   > Building the human KaBOB instance should take ~100 minutes. If you would like to follow along via the agraph logs you can login to the agraph container using `docker exec -ti agraph bash` and then view the agraph log output using `tail -f /tmp/agraph_load_check---supervisor-MKGnli.log`
+   > Building the human KaBOB instance should take ~100 minutes. If you would like to follow along via the agraph logs you can login to the agraph container using `docker exec -ti agraph bash` and then view the agraph log output using `tail -f /tmp/agraph_load_check---supervisor-MKGnli.log` (note the name of the log file may be slightly different)
    
    
