@@ -28,9 +28,11 @@ This project facilitates the installation and construction of a KaBOB instance v
    > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands. All scripts should be run from the base directory of the project: `cd kabob.app.git`
 
 ### BUILD STEP 1: Download datasources and generate RDF
-Run: `scripts/step1_rdf-gen.sh _n_` where _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine. 
+Run: `scripts/step1_rdf-gen.sh n` where _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine. 
 
    > This step may take >90 min.
+
+   > NOTE: The so.owl PURL is currently broken (as of Dec 5th, 2016). In order to proceed further you must manually download so.owl to the /kabob_data volume. To do so, run the following command: `docker exec agraph bash -c "cd /kabob_data/ontology;wget https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/releases/so-xp.owl/so-xp.owl;rm so.owl"`
 
 ### BUILD STEP 2: Setup and start AllegroGraph
 Run: `scripts/step2_ag-setup.sh`
@@ -40,6 +42,6 @@ Run: `scripts/step2_ag-setup.sh`
 ### BUILD STEP 3: Build KaBOB
 Run: `scripts/step3_build-kabob.sh`
 
-   > Building the human KaBOB instance should take ~100 minutes.
+   > Building the human KaBOB instance should take ~100 minutes. If you would like to follow along via the agraph logs you can login to the agraph container using `docker exec -ti agraph bash` and then view the agraph log output using `tail -f /tmp/agraph_load_check---supervisor-MKGnli.log`
    
    
