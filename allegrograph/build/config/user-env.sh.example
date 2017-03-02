@@ -11,6 +11,9 @@
 # The port used by AllegroGraph
 export PLATFORM_ALLEGROGRAPH_PORT=10035
 
+# The AllegroGraph admin username:password
+export AG_USERPASS="test:xyzzy"
+
 # Add your AllegroGraph license header below. KaBOB cannot be built 
 # without a license because the default triple limit is too small.
 export AG_LICENSE_HEADER="Licensee ..."

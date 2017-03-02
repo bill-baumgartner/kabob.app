@@ -32,12 +32,10 @@ Run: `scripts/step1_rdf-gen.sh n` where _n_ is the number of docker containers (
 
    > This step may take >90 min.
 
-   > NOTE: The so.owl PURL is currently broken (as of Dec 5th, 2016). In order to proceed further you must manually download so.owl to the /kabob_data volume. To do so, run the following command: `docker exec agraph bash -c "cd /kabob_data/ontology;wget https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/master/releases/so-xp.owl/so-xp.owl;rm so.owl"`
-
 ### BUILD STEP 2: Setup and start AllegroGraph
 Run: `scripts/step2_ag-setup.sh`
 
-   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB. Access credentials for logging into AllegroGraph can be found in the [default AllegroGraph configuration file](https://github.com/franzinc/docker-agraph/blob/master/agraph.cfg) (See the SuperUser line).
+   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB. Access credentials for logging into AllegroGraph can be found in the `user-env.sh` file created earlier in this step. (See the SuperUser line).
 
 ### BUILD STEP 3: Build KaBOB
 Run: `scripts/step3_build-kabob.sh`
