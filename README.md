@@ -23,22 +23,26 @@ This project facilitates the installation and construction of a KaBOB instance v
    ```sh
    git clone --branch v0.2 https://github.com/bill-baumgartner/kabob.app ./kabob.app.git
    ```
-3. Follow the instructions in `kabob.app.git/allegrograph/build/config/user-env.sh.example` to create a `user-env.sh` file with your AllegroGraph license.
+3. Follow the instructions in `kabob.app.git/allegrograph/build/config/user-env.sh.example` to create a `user-env.sh` file with your AllegroGraph license. Place the newly created `user-env.sh` file in the same directory as `the user-env.sh.example` file.
 
    > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands. All scripts should be run from the base directory of the project: `cd kabob.app.git`
 
 ### BUILD STEP 1: Download datasources and generate RDF
-Run: `scripts/step1_rdf-gen.sh n` where _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine. 
+Run: `scripts/step1_rdf-gen.sh KEY n` where:
+  * _KEY_ is a user-defined key to uniquely identify the KaBOB build. This key enables multiple KaBOB instances to be run in the same Docker environment. Example keys may be "development" or "production". Keys must not contain whitespace.
+  * _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine. 
 
    > This step may take >90 min.
 
 ### BUILD STEP 2: Setup and start AllegroGraph
-Run: `scripts/step2_ag-setup.sh`
+Run: `scripts/step2_ag-setup.sh KEY` where:
+  * _KEY_ is __the same__ user-defined key specified in _Build Step 1_ above that uniquely identifies the KaBOB build.
 
-   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB. Access credentials for logging into AllegroGraph can be found in the `user-env.sh` file created earlier in this step. (See the SuperUser line).
+   > At this point, AllegroGraph should be running and its WebView UI should be visible at http://[HOST_URL]:10035, where [HOST_URL] is the URL for the machine hosting KaBOB. Access credentials for logging into AllegroGraph can be found in the `user-env.sh` file created earlier in this step.
 
 ### BUILD STEP 3: Build KaBOB
-Run: `scripts/step3_build-kabob.sh`
+Run: `scripts/step3_build-kabob.sh KEY` where:
+  * _KEY_ is __the same__ user-defined key specified in _Build Step 1_ above that uniquely identifies the KaBOB build.
 
    > Building the human KaBOB instance should take ~100 minutes. If you would like to follow along via the agraph logs you can login to the agraph container using `docker exec -ti agraph bash` and then view the agraph log output using `tail -f /tmp/agraph_load_check---supervisor-MKGnli.log` (note the name of the log file may be slightly different)
    
