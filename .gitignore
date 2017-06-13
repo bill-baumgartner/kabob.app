@@ -1,2 +1,4 @@
 *~
+.idea/
+*.iml
 allegrograph/build/config/user-env.sh
