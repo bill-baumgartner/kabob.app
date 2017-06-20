@@ -27,7 +27,7 @@ CONTAINER_COUNT=$2
 docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
 
 #  Initial setup (downloads ontologies used by KaBOB): 
-docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.2 ./setup.sh
+docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
 
 
 # Create data source RDF (downloads and processes publicly available databases).
