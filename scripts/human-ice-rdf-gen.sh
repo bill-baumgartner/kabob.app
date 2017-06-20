@@ -14,6 +14,7 @@
 
 KB_KEY=$1
 TAX="-t 9606"
+MAVEN="/usr/bin/mvn"
 
 case $2 in
     1) DATASOURCES=("UNIPROT_TREMBL_SPARSE__HUMAN_ONLY,MIRBASE,DRUGBANK,HGNC,NCBIGENE_GENEINFO,NCBIGENE_REFSEQUNIPROTCOLLAB,GOA_HUMAN,HP_ANNOTATIONS_ALL_SOURCES,IREFWEB_HUMAN_ONLY,REFSEQ_RELEASECATALOG,NCBIGENE_GENE2REFSEQ,UNIPROT_SWISSPROT,UNIPROT_IDMAPPING")
@@ -36,7 +37,7 @@ COUNTER=1
 for ds in "${DATASOURCES[@]}"
 do
     echo "Starting kabob-base container to process: $ds"
-    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./ice-rdf-gen.sh "$TAX" "$ds" "$COUNTER"`
+    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./ice-rdf-gen.sh "$TAX" "$ds" "$MAVEN" "$COUNTER"`
     COUNTER=$((COUNTER + 1))
 done
 docker wait $DID
