@@ -8,6 +8,29 @@
 # the agraph container name so that they can be uniquely identified.
 #
 
+
+function print_usage {
+    echo "Usage:"
+    echo "$(basename $0) [OPTIONS]"
+    echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
+}
+
+while getopts "k:h" OPTION; do
+    case ${OPTION} in
+        # A unique key that will be used to name docker containers for this build
+        k) KB_KEY=$OPTARG
+           ;;
+        # HELP!
+        h) print_usage; exit 0
+           ;;
+    esac
+done
+
+if [[ -z ${KB_KEY} ]]; then
+    print_usage
+    exit 1
+fi
+
 if ! [[ -e README.md ]]; then
     echo "Please run from the root of the project."
     exit 1
@@ -49,7 +72,7 @@ docker build -t ccp/agraph:v6.1.1 allegrograph/build/
 # Create a dedicated network so that other containers can talk to the agraph container
 docker network create agraph-net-$KB_KEY
 
-# Start up AllegroGraph; monit port is 2812
+# Start up AllegroGraph
 docker run -d -p 10000-$PLATFORM_ALLEGROGRAPH_PORT:10000-$PLATFORM_ALLEGROGRAPH_PORT \
        --net agraph-net-$KB_KEY \
        --volumes-from agraph-data-$KB_KEY --volumes-from kabob_data-$KB_KEY --volumes-from ag-load-requests-$KB_KEY \
