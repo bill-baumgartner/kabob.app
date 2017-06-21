@@ -57,7 +57,7 @@ fi
 #docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
 
 # if provided, copy the drugbank XML file into the /kabob_data container
-if [[ $DRUGBANK_FILE ]]
+if [[ $DRUGBANK_FILE ]]; then
     docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
     docker cp $DRUGBANK_FILE kabob_data-test:'/kabob_data/raw/drugbank/full database.xml'
 fi
