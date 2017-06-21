@@ -59,27 +59,27 @@ if ! [[ -e README.md ]]; then
     exit 1
 fi
 
-## Create a Docker volume where the downloaded data files and generated RDF will be stored:
-#docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
-#
-## if provided, copy the drugbank XML file into the /kabob_data container and create a metadata file (.ready)
-#if [[ ${DRUGBANK_FILE} ]]; then
-#    echo "Copying DrugBank file ($DRUGBANK_FILE) into Docker volume with key: $KB_KEY"
-#    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
-#    docker cp "${DRUGBANK_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/drugbank/full database.xml'
-#    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/drugbank/full database.xml"'
-#fi
-#
-## if provided, copy the pharmGKB relationships file into the /kabob_data container and create a metadata file (.ready)
-#if [[ ${DRUGBANK_FILE} ]]; then
-#    echo "Copying PharmGKB file ($PHARMGKB_RELATIONS_FILE) into Docker volume with key: $KB_KEY"
-#    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/pharmgkb'
-#    docker cp "${PHARMGKB_RELATIONS_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/pharmgkb/relationships.tsv'
-#    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/pharmgkb/relationships.tsv"'
-#fi
-#
-##  Initial setup (downloads ontologies used by KaBOB):
-#docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
+# Create a Docker volume where the downloaded data files and generated RDF will be stored:
+docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
+
+# if provided, copy the drugbank XML file into the /kabob_data container and create a metadata file (.ready)
+if [[ ${DRUGBANK_FILE} ]]; then
+    echo "Copying DrugBank file ($DRUGBANK_FILE) into Docker volume with key: $KB_KEY"
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
+    docker cp "${DRUGBANK_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/drugbank/full database.xml'
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/drugbank/full database.xml"'
+fi
+
+# if provided, copy the pharmGKB relationships file into the /kabob_data container and create a metadata file (.ready)
+if [[ ${DRUGBANK_FILE} ]]; then
+    echo "Copying PharmGKB file ($PHARMGKB_RELATIONS_FILE) into Docker volume with key: $KB_KEY"
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/pharmgkb'
+    docker cp "${PHARMGKB_RELATIONS_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/pharmgkb/relationships.tsv'
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/pharmgkb/relationships.tsv"'
+fi
+
+#  Initial setup (downloads ontologies used by KaBOB):
+docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
 
 
 # Create data source RDF (downloads and processes publicly available databases).
