@@ -34,8 +34,6 @@ if ! [[ -e README.md ]]; then
     exit 1
 fi
 
-KB_KEY=$1
-
 # Create a Docker volume where AllegroGraph will store its data: 
 docker create -v /data --name virtuoso-data-${KB_KEY} ubuntu:latest
 

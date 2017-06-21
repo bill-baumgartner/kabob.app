@@ -36,8 +36,6 @@ if ! [[ -e README.md ]]; then
     exit 1
 fi
 
-KB_KEY=$1
-
 # make sure the $PLATFORM_ALLEGROGRAPH_PORT environment variable is set
 source allegrograph/build/config/user-env.sh
 
