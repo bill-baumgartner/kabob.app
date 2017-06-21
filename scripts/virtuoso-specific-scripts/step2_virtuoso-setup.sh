@@ -52,8 +52,8 @@ docker run -d -p 8890:8890 -p 1111:1111 \
        -e DBA_PASSWORD=dba \
        -e SPARQL_UPDATE=true \
        -e DEFAULT_GRAPH=http://ccp.ucdenver.edu/default/ \
-       --volumes-from virtuoso-data-$KB_KEY --volumes-from kabob_data-${KB_KEY} --volumes-from virtuoso-load-requests-${KB_KEY} \
-       --name kabob-virtuoso-${KB_KEY} ccp/virtuoso
+       --volumes-from virtuoso-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from virtuoso-load-requests-${KB_KEY} \
+       --name virtuoso-${KB_KEY} ccp/virtuoso
 
 # Log the Virtuoso port to the virtuoso-load-requests directory
-docker exec agraph-${KB_KEY} /bin/bash -c "echo 8890 > /virtuoso-load-requests/virtuoso.port"
+docker exec virtuoso-${KB_KEY} /bin/bash -c "echo 8890 > /virtuoso-load-requests/virtuoso.port"
