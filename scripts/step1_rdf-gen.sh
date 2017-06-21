@@ -15,16 +15,52 @@
 #
 #
 
+function print_usage {
+    echo "Usage:"
+    echo "$(basename $0) [OPTIONS]"
+    echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
+    echo "  [-c <container-count>]: The number of processes to spin up (as individual containers) when generating RDF. This count should be between 1 and 5."
+    echo "  [-d <drugbank XML file path>]: OPTIONAL -- The local path to the DrugBank 'full database.xml' file. This file requires user registration to download, and therefore must be supplied by the user. This parameter is optional. If not provided, then the DrugBank resource simply will not be included in this build of KaBOB."
+}
+
+while getopts "k:c:d:h" OPTION; do
+    case $OPTION in
+        # A unique key that will be used to name docker containers for this build
+        k) KB_KEY=$OPTARG
+           ;;
+        # The number of processes to spin up (as individual containers) when generating RDF.
+        # This count should be between 1 and 5.
+        c) CONTAINER_COUNT=$OPTARG
+           ;;
+        # OPTIONAL -- The local path to the DrugBank 'full database.xml' file. This file requires user registration to
+        # download, and therefore must be supplied by the user. This parameter is optional. If not provided, then the
+        # DrugBank resource simply will not be included in this build of KaBOB.
+        d) DRUGBANK_FILE=$OPTARG
+           ;;
+        # HELP!
+        h) print_usage; exit 0
+           ;;
+    esac
+done
+
+if [[ -z $KB_KEY || -z $CONTAINER_COUNT ]]; then
+    print_usage
+    exit 1
+fi
+
 if ! [[ -e README.md ]]; then
     echo "Please run from the root of the project."
     exit 1
 fi
 
-KB_KEY=$1
-CONTAINER_COUNT=$2
-
 # Create a Docker volume where the downloaded data files and generated RDF will be stored: 
 #docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
+
+# if provided, copy the drugbank XML file into the /kabob_data container
+if [[ $DRUGBANK_FILE ]]
+    docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
+    docker cp $DRUGBANK_FILE kabob_data-test:'/kabob_data/raw/drugbank/full database.xml'
+fi
 
 #  Initial setup (downloads ontologies used by KaBOB): 
 #docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
