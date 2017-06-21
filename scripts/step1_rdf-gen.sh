@@ -21,10 +21,11 @@ function print_usage {
     echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
     echo "  [-c <container-count>]: The number of processes to spin up (as individual containers) when generating RDF. This count should be between 1 and 5."
     echo "  [-d <drugbank XML file path>]: OPTIONAL -- The local path to the DrugBank 'full database.xml' file. This file requires user registration to download, and therefore must be supplied by the user. This parameter is optional. If not provided, then the DrugBank resource simply will not be included in this build of KaBOB."
+    echo "  [-p <pharmgkb relationships file path>]: OPTIONAL -- The local path to the PharmGKB relationships file (relationships.tsv). This file requires a PharmGKB license, and therefore must be supplied by the user. This parameter is optional. If not provided, then the PharmGKB relationships simply will not be included in this build of KaBOB."
 }
 
-while getopts "k:c:d:h" OPTION; do
-    case $OPTION in
+while getopts "k:c:d:p:h" OPTION; do
+    case ${OPTION} in
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
            ;;
@@ -37,13 +38,18 @@ while getopts "k:c:d:h" OPTION; do
         # DrugBank resource simply will not be included in this build of KaBOB.
         d) DRUGBANK_FILE=$OPTARG
            ;;
+        # OPTIONAL -- The local path to the PharmGKB relationships file. This file requires a license from PharmGKB,
+        # and therefore must be supplied by the user. This parameter is optional. If not provided, then the
+        # PharmGKB relationships resource simply will not be included in this build of KaBOB.
+        p) PHARMGKB_RELATIONS_FILE=$OPTARG
+           ;;
         # HELP!
         h) print_usage; exit 0
            ;;
     esac
 done
 
-if [[ -z $KB_KEY || -z $CONTAINER_COUNT ]]; then
+if [[ -z ${KB_KEY} || -z ${CONTAINER_COUNT} ]]; then
     print_usage
     exit 1
 fi
@@ -56,11 +62,20 @@ fi
 # Create a Docker volume where the downloaded data files and generated RDF will be stored: 
 #docker create -v /kabob_data --name kabob_data-$KB_KEY ubuntu:latest
 
-# if provided, copy the drugbank XML file into the /kabob_data container
-if [[ $DRUGBANK_FILE ]]; then
-    echo "Copying DrugBank file ($DRUGBANK_FILE) into Docker volume using key: $KB_KEY"
-    docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
-    docker cp "$DRUGBANK_FILE" kabob_data-$KB_KEY:'/kabob_data/raw/drugbank/full database.xml'
+# if provided, copy the drugbank XML file into the /kabob_data container and create a metadata file (.ready)
+if [[ ${DRUGBANK_FILE} ]]; then
+    echo "Copying DrugBank file ($DRUGBANK_FILE) into Docker volume with key: $KB_KEY"
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
+    docker cp "${DRUGBANK_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/drugbank/full database.xml'
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/drugbank/full database.xml"'
+fi
+
+# if provided, copy the pharmGKB relationships file into the /kabob_data container and create a metadata file (.ready)
+if [[ ${DRUGBANK_FILE} ]]; then
+    echo "Copying PharmGKB file ($PHARMGKB_RELATIONS_FILE) into Docker volume with key: $KB_KEY"
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/pharmgkb'
+    docker cp "${PHARMGKB_RELATIONS_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/pharmgkb/relationships.tsv'
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:0.3 sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/pharmgkb/relationships.tsv"'
 fi
 
 #  Initial setup (downloads ontologies used by KaBOB): 
@@ -68,5 +83,5 @@ fi
 
 
 # Create data source RDF (downloads and processes publicly available databases).
-chmod 755 scripts/human-ice-rdf-gen.sh
-scripts/human-ice-rdf-gen.sh $KB_KEY $CONTAINER_COUNT
+#chmod 755 scripts/human-ice-rdf-gen.sh
+#scripts/human-ice-rdf-gen.sh ${KB_KEY} ${CONTAINER_COUNT}

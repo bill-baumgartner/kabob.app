@@ -28,10 +28,11 @@ This project facilitates the installation and construction of a KaBOB instance v
    > At this point, the KaBOB build is ready to proceed via a succession of scripts that call Docker commands. All scripts should be run from the base directory of the project: `cd kabob.app.git`
 
 ### BUILD STEP 1: Download datasources and generate RDF
-Run: `scripts/step1_rdf-gen.sh -k KEY -c n -d DRUGBANK_XML_FILE` where:
+Run: `scripts/step1_rdf-gen.sh -k KEY -c n -d DRUGBANK_XML_FILE -p PHARMGKB_RELATIONSHIPS_FILE` where:
   * _KEY_ is a user-defined key to uniquely identify the KaBOB build. This key enables multiple KaBOB instances to be run in the same Docker environment. Example keys may be "development" or "production". Keys must not contain whitespace.
   * _n_ is the number of docker containers (1-5) that will be used to generate RDF. _n_ should be <= the number of cores available on your machine.
   * _DRUGBANK_XML_FILE_ is the path to the DrugBank 'full database.xml' file on the local file system. The DrugBank 'full database.xml' file can be downloaded from [here](https://www.drugbank.ca/releases/5-0-6/downloads/all-full-database) after creating an account and agreeing to the DrugBank license. **This argument is optional. If the user prefers to exclude DrugBank from the KaBOB build then this argument can be excluded.** 
+  * _PHARMGKB_RELATIONSHIPS_FILE_ is the path to the PharmGKB relationships file (relationships.tsv) on the local file system. Use of this file requires a PharmGKB license which can be obtained [here](https://www.pharmgkb.org/licensing/). **Note: This argument is optional. If the user prefers to exclude the PharmGKB relationships from the KaBOB build then this argument can be excluded.**
 
    > This step may take >90 min.
 
