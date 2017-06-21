@@ -58,6 +58,7 @@ fi
 
 # if provided, copy the drugbank XML file into the /kabob_data container
 if [[ $DRUGBANK_FILE ]]; then
+    echo "Copying DrugBank file ($DRUGBANK_FILE) into Docker volume using key: $KB_KEY"
     docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 sh -c 'mkdir -p /kabob_data/raw/drugbank'
     docker cp $DRUGBANK_FILE kabob_data-test:'/kabob_data/raw/drugbank/full database.xml'
 fi
