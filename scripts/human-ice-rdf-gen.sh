@@ -32,13 +32,20 @@ case $2 in
        ;;
 esac
 
-DID=""
-COUNTER=1
-for ds in "${DATASOURCES[@]}"
-do
-    echo "Starting kabob-base container to process: $ds"
-    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./ice-rdf-gen.sh "$TAX" "$ds" "$MAVEN" "$COUNTER"`
-    COUNTER=$((COUNTER + 1))
-done
+# just do the first one
+ds="PHARMGKB_DRUG,PHARMGKB_DISEASE,PHARMGKB_GENE,PHARMGKB_RELATION,NCBIGENE_MIM2GENE,UNIPROT_TREMBL_SPARSE_HUMAN_ONLY,MIRBASE,DRUGBANK,HGNC,NCBIGENE_GENEINFO,NCBIGENE_REFSEQUNIPROTCOLLAB,GOA_HUMAN,HP_ANNOTATIONS_ALL_SOURCES"
+DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./ice-rdf-gen.sh "$TAX" "$ds" "$MAVEN" "$COUNTER"`
 docker wait $DID
 docker rm $DID
+
+
+#DID=""
+#COUNTER=1
+#for ds in "${DATASOURCES[@]}"
+#do
+#    echo "Starting kabob-base container to process: $ds"
+#    DID=$DID" "`docker run -d --name "rdf_gen_$COUNTER" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./ice-rdf-gen.sh "$TAX" "$ds" "$MAVEN" "$COUNTER"`
+#    COUNTER=$((COUNTER + 1))
+#done
+#docker wait $DID
+#docker rm $DID
