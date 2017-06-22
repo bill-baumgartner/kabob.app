@@ -25,7 +25,7 @@ while getopts "k:n:h" OPTION; do
     esac
 done
 
-if [[ -z ${KB_KEY} ]]; then
+if [[ -z ${KB_KEY} || -z ${KB_NAME} ]]; then
     print_usage
     exit 1
 fi
@@ -36,4 +36,4 @@ if ! [[ -e README.md ]]; then
 fi
 
 # Build KaBOB using the RDF generated from downloaded data sources:
-docker run --rm --net agraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from ag-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/build-from-scratch-ag.sh ${KB_NAME}
+docker run --rm --net agraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from ag-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/allegrograph-specific/build-from-scratch-ag.sh ${KB_NAME}
