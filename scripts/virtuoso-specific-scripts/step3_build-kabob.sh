@@ -4,10 +4,20 @@
 # Build KaBOB
 #
 
-while getopts "k:h" OPTION; do
+function print_usage {
+    echo "Usage:"
+    echo "$(basename $0) [OPTIONS]"
+    echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
+    echo "  [-n <kb-name>]: The name of the AllegroGraph repository that will be populated as KaBOB, e.g kabob-prod"
+}
+
+while getopts "k:n:h" OPTION; do
     case ${OPTION} in
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
+           ;;
+        # A unique name of the AllegroGraph repository that will be populated as KaBOB, e.g kabob-prod
+        n) KB_NAME=$OPTARG
            ;;
         # HELP!
         h) print_usage; exit 0
@@ -15,7 +25,7 @@ while getopts "k:h" OPTION; do
     esac
 done
 
-if [[ -z ${KB_KEY} ]]; then
+if [[ -z ${KB_KEY} || -z ${KB_NAME} ]]; then
     print_usage
     exit 1
 fi
@@ -26,4 +36,4 @@ if ! [[ -e README.md ]]; then
 fi
 
 # Build KaBOB using the RDF generated from downloaded data sources:
-docker run --rm --net virtuoso-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from virtuoso-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/build-from-scratch-virtuoso.sh
+docker run --rm --net virtuoso-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from virtuoso-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/virtuoso-specific/build-from-scratch-virtuoso.sh ${KB_NAME}
