@@ -78,4 +78,5 @@ docker run -d -p 10000-${PLATFORM_ALLEGROGRAPH_PORT}:10000-${PLATFORM_ALLEGROGRA
 
 # Log the AllegroGraph port to the ag-load-requests directory
 docker exec agraph-${KB_KEY} /bin/bash -c "echo ${PLATFORM_ALLEGROGRAPH_PORT} > /ag-load-requests/agraph.port"
+docker exec agraph-${KB_KEY} /bin/bash -c "echo 'agraph-${KB_KEY}' > /ag-load-requests/agraph.container.name"
 
