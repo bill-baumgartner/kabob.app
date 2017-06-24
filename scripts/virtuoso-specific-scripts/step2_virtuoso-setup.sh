@@ -56,5 +56,5 @@ docker run -d -p 8890:8890 -p 1111:1111 \
        --name virtuoso-${KB_KEY} ccp/virtuoso
 
 # Log the Virtuoso port to the virtuoso-load-requests directory
-docker exec virtuoso-${KB_KEY} /bin/bash -c "echo 8890 > /virtuoso-load-requests/virtuoso.port"
+docker exec virtuoso-${KB_KEY} /bin/bash -c "echo 1111 > /virtuoso-load-requests/virtuoso.port"
 docker exec virtuoso-${KB_KEY} /bin/bash -c "echo 'virtuoso-${KB_KEY}' > /virtuoso-load-requests/virtuoso.container.name"
