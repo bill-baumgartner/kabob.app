@@ -23,6 +23,7 @@ COPY stardog_download/stardog-${STARDOG_VERSION}.zip /
 RUN unzip /stardog-${STARDOG_VERSION}.zip
 
 COPY stardog_download/stardog-license-key.bin /stardog-${STARDOG_VERSION}/
+COPY scripts/stardog.properties /stardog-${STARDOG_VERSION}/
 
 EXPOSE 5820
 

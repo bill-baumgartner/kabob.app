@@ -13,6 +13,7 @@ trap '/stardog-${STARDOG_VERSION}/bin/stardog-admin server stop ; exit' 15
 #CMD borrowed from: https://hub.docker.com/r/nice/ld-docker-stardog/~/dockerfile/
 rm -f ${STARDOG_HOME}/system.lock || true && \
     cp /stardog-${STARDOG_VERSION}/stardog-license-key.bin ${STARDOG_HOME} && \
+    cp /stardog-${STARDOG_VERSION}/stardog.properties ${STARDOG_HOME} && \
     /stardog-${STARDOG_VERSION}/bin/stardog-admin server start  && \
     sleep 1 && \
     (tail -f ${STARDOG_HOME}/stardog.log &) && \
