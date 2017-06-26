@@ -20,7 +20,7 @@ EXPOSE 5820
 # CMD borrowed from: https://hub.docker.com/r/nice/ld-docker-stardog/~/dockerfile/
 CMD rm -f ${STARDOG_HOME}/system.lock || true && \
     cp /stardog-${STARDOG_VERSION}/stardog-license-key.bin ${STARDOG_HOME} && \
-    ./bin/stardog-admin server start && \
+    /stardog-${STARDOG_VERSION}/bin/stardog-admin server start && \
     sleep 1 && \
     (tail -f ${STARDOG_HOME}/stardog.log &) && \
     while (pidof java > /dev/null); do sleep 1; done
