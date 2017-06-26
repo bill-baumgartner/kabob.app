@@ -15,6 +15,9 @@ inotifywait -m $1 -e create,moved_to,attrib |
 
 	    # remove any previous .success or .error files (in case
 	    # this is a retry of a previous load attempt)
+	    # TODO: along with removing any previous success/fail files, this script needs to clear the
+	    # file being loaded from the Virtuoso  DB.DBA.LOAD_LIST table, or maybe just set its status to 0
+	    # delete FROM DB.DBA.LOAD_LIST
 	    if [[ -f $SUCCESS_FILE ]]
 	    then
 		rm -f $SUCCESS_FILE
