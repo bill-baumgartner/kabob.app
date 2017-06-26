@@ -102,6 +102,7 @@ inotifywait -m $1 -e create,moved_to,attrib |
 
 	if [[ "$file" == *.create ]]
 	then
+	    echo "Processing request to create new database: ${file}"
 	    SUCCESS_FILE="$path$file.success"
         FAIL_FILE="$path$file.error"
 
@@ -136,9 +137,9 @@ inotifywait -m $1 -e create,moved_to,attrib |
 
         create_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db create --name ${REPO_NAME}"
 
-	    echo "EXECUTING DATABASE CREATION COMMAND: $create_command"
+	    echo "EXECUTING DATABASE CREATION COMMAND: ${create_command}"
 
-	    su -c "$create_command" | tee ${path}${file}.log
+	    su -c "${create_command}" | tee ${path}${file}.log
 
 	    if [[ ${PIPESTATUS[0]} == 0 ]]
 	    then
