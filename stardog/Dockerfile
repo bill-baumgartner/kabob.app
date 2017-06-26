@@ -16,7 +16,6 @@ COPY scripts/supervisord.conf /etc/
 COPY scripts/init-stardog.sh scripts/check-for-load.sh /usr/bin/
 
 RUN chmod 600 /etc/supervisord.conf && \
-    chmod 755 /virtuoso.sh && \
     chmod 755 /usr/bin/*.sh
 
 COPY stardog_download/stardog-${STARDOG_VERSION}.zip /
