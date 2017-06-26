@@ -86,7 +86,7 @@ inotifywait -m $1 -e create,moved_to,attrib |
 		PARAMS="$PARAMS --remove-all"
 	    fi
 
-        load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
+        load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --strict-parsing=FALSE --server-side -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
 	    
