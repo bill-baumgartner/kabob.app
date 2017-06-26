@@ -18,8 +18,8 @@ COPY stardog_download/stardog-license-key.bin /stardog-${STARDOG_VERSION}/
 EXPOSE 5820
 
 # CMD borrowed from: https://hub.docker.com/r/nice/ld-docker-stardog/~/dockerfile/
-CMD rm ${STARDOG_HOME}/system.lock || true && \
-    cp /stardog-${STARDOG_VER}/stardog-license-key.bin ${STARDOG_HOME} && \
+CMD rm -f ${STARDOG_HOME}/system.lock || true && \
+    cp /stardog-${STARDOG_VERSION}/stardog-license-key.bin ${STARDOG_HOME} && \
     ./bin/stardog-admin server start && \
     sleep 1 && \
     (tail -f ${STARDOG_HOME}/stardog.log &) && \
