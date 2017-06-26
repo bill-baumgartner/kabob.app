@@ -4,10 +4,20 @@
 FROM azul/zulu-openjdk:8u92
 
 RUN apt-get update && apt-get install -y \
-    unzip
+    unzip \
+    supervisor \
+    inotify-tools
 
 ENV STARDOG_VERSION=5.0 \
     STARDOG_HOME=/stardog-data
+
+
+COPY scripts/supervisord.conf /etc/
+COPY scripts/init-stardog.sh scripts/check-for-load.sh /usr/bin/
+
+RUN chmod 600 /etc/supervisord.conf && \
+    chmod 755 /virtuoso.sh && \
+    chmod 755 /usr/bin/*.sh
 
 COPY stardog_download/stardog-${STARDOG_VERSION}.zip /
 
@@ -18,9 +28,11 @@ COPY stardog_download/stardog-license-key.bin /stardog-${STARDOG_VERSION}/
 EXPOSE 5820
 
 # CMD borrowed from: https://hub.docker.com/r/nice/ld-docker-stardog/~/dockerfile/
-CMD rm -f ${STARDOG_HOME}/system.lock || true && \
-    cp /stardog-${STARDOG_VERSION}/stardog-license-key.bin ${STARDOG_HOME} && \
-    /stardog-${STARDOG_VERSION}/bin/stardog-admin server start && \
-    sleep 1 && \
-    (tail -f ${STARDOG_HOME}/stardog.log &) && \
-    while (pidof java > /dev/null); do sleep 1; done
+#CMD rm -f ${STARDOG_HOME}/system.lock || true && \
+#    cp /stardog-${STARDOG_VERSION}/stardog-license-key.bin ${STARDOG_HOME} && \
+#    /stardog-${STARDOG_VERSION}/bin/stardog-admin server start && \
+#    sleep 1 && \
+#    (tail -f ${STARDOG_HOME}/stardog.log &) && \
+#    while (pidof java > /dev/null); do sleep 1; done
+
+CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
