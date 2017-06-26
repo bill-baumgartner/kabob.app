@@ -56,5 +56,5 @@ docker run -d -p 5820:5820 \
 
 # Log the AllegroGraph port to the ag-load-requests directory
 docker exec stardog-${KB_KEY} /bin/bash -c "echo 5820 > /stardog-load-requests/stardog.port"
-docker exec stardog-${KB_KEY} /bin/bash -c "echo 'agraph-${KB_KEY}' > /stardog-load-requests/stardog.container.name"
+docker exec stardog-${KB_KEY} /bin/bash -c "echo 'stardog-${KB_KEY}' > /stardog-load-requests/stardog.container.name"
 
