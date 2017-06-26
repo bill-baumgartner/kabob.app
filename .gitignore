@@ -2,3 +2,7 @@
 .idea/
 *.iml
 allegrograph/build/config/user-env.sh
+
+stardog/stardog_download/stardog-*.zip
+
+stardog/stardog_download/stardog-license-key.bin
