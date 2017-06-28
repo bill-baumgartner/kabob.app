@@ -6,7 +6,8 @@ FROM azul/zulu-openjdk:8u92
 RUN apt-get update && apt-get install -y \
     unzip \
     supervisor \
-    inotify-tools
+    inotify-tools \
+    less
 
 ENV STARDOG_VERSION=5.0 \
     STARDOG_HOME=/stardog-data
