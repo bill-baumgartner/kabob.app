@@ -36,4 +36,4 @@ if ! [[ -e README.md ]]; then
 fi
 
 # Build KaBOB using the RDF generated from downloaded data sources:
-docker run --rm --net stardog-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from stardog-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/stardog-specific/build-from-scratch-stardog.sh ${KB_NAME}
+docker run --rm --net stardog-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from stardog-load-requests-${KB_KEY} billbaumgartner/kabob-base:0.3 /kabob.git/scripts/docker/stardog-specific/build-from-scratch.sh ${KB_NAME}
