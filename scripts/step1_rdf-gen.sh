@@ -79,9 +79,9 @@ if [[ ${DRUGBANK_FILE} ]]; then
 fi
 
 #  Initial setup (downloads ontologies used by KaBOB):
-docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
+#docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:0.3 ./setup.sh
 
 
 # Create data source RDF (downloads and processes publicly available databases).
-#chmod 755 scripts/human-ice-rdf-gen.sh
-#scripts/human-ice-rdf-gen.sh ${KB_KEY} ${CONTAINER_COUNT}
+chmod 755 scripts/human-ice-rdf-gen.sh
+scripts/human-ice-rdf-gen.sh ${KB_KEY} ${CONTAINER_COUNT}
