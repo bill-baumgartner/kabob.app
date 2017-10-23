@@ -26,7 +26,7 @@ RUN unzip /stardog-${STARDOG_VERSION}.zip
 COPY stardog_download/stardog-license-key.bin /stardog-${STARDOG_VERSION}/
 COPY scripts/stardog.properties /stardog-${STARDOG_VERSION}/
 
-EXPOSE $STARDOG_PORT
+#EXPOSE $STARDOG_PORT
 
 # CMD borrowed from: https://hub.docker.com/r/nice/ld-docker-stardog/~/dockerfile/
 #CMD rm -f ${STARDOG_HOME}/system.lock || true && \

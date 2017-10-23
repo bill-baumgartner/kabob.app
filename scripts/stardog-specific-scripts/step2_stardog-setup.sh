@@ -47,7 +47,7 @@ docker create -v /stardog-data --name stardog-data-${KB_KEY} ubuntu:latest
 docker create -v /stardog-load-requests --name stardog-load-requests-${KB_KEY} ubuntu:latest
 
 # Build the Docker image (this will import the AllegroGraph Docker image): 
-docker build --build-arg STARDOG_PORT=${STARDOG_PORT} -t ccp/stardog:v5.0 stardog/
+docker build -t ccp/stardog:v5.0 stardog/
 
 # Create a dedicated network so that other containers can talk to the agraph container
 docker network create stardog-net-${KB_KEY}
