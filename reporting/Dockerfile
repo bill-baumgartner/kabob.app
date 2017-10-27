@@ -1,7 +1,9 @@
-FROM beakerx/beakerx
+FROM jupyter/scipy-notebook
 
-RUN pip install sparqlkernel --user && \
-    /home/beakerx/.conda/envs/beakerx/bin/jupyter sparqlkernel install
+RUN conda install -c conda-forge ipywidgets beakerx
+
+RUN pip install sparqlkernel && \
+    jupyter sparqlkernel install
 
 RUN apt-get update && apt-get install -y \
     maven \
