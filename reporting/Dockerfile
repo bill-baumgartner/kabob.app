@@ -2,7 +2,7 @@ FROM jupyter/scipy-notebook
 
 RUN conda install -c conda-forge ipywidgets beakerx
 
-RUN pip install sparqlkernel --user && \
+RUN conda install sparqlkernel && \
     jupyter sparqlkernel install
 
 RUN apt-get update && apt-get install -y \
