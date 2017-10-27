@@ -1,6 +1,6 @@
 FROM beakerx/beakerx
 
-RUN pip install sparqlkernel && \
+RUN sudo pip install sparqlkernel && \
     jupyter sparqlkernel install
 
 RUN apt-get update && apt-get install -y \
