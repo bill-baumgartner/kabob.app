@@ -1,7 +1,7 @@
 FROM beakerx/beakerx
 
 RUN pip install sparqlkernel --user && \
-    jupyter sparqlkernel install
+    /home/beakerx/.conda/envs/beakerx/bin/jupyter sparqlkernel install
 
 RUN apt-get update && apt-get install -y \
     maven \
