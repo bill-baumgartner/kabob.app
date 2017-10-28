@@ -1,8 +1,10 @@
 FROM jupyter/scipy-notebook
 
+USER root
+
 RUN conda install -c conda-forge ipywidgets beakerx
 
-RUN conda install sparqlkernel && \
+RUN pip install sparqlkernel && \
     jupyter sparqlkernel install
 
 RUN apt-get update && apt-get install -y \
