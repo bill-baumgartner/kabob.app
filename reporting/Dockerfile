@@ -20,6 +20,7 @@ RUN wget -q -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy
 RUN git clone --branch leiningen-sesame4 https://github.com/bill-baumgartner/kr.git ./kr.git && \
     cd ./kr.git && \
     lein install && \
+    lein uberjar && \
     cd ..
 
 # install the kabob project
@@ -27,6 +28,7 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     cd ./kabob.git && \
     ./scripts/download/download-virtuoso-dependencies.sh mvn && \
     lein install && \
+    lein uberjar && \
     cd ..
 
 #RUN jupyter nbextension enable beakerx --py --sys-prefix
