@@ -21,8 +21,6 @@ RUN git clone --branch leiningen-sesame4 https://github.com/bill-baumgartner/kr.
     lein install && \
     cd ..
 
-COPY do.kabob /
-
 # install the kabob project
 RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     cd ./kabob.git && \
