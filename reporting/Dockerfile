@@ -1,8 +1,9 @@
-FROM jupyter/scipy-notebook
+#FROM jupyter/scipy-notebook
+FROM beakerx/beakerx
 
 USER root
 
-RUN conda install -c conda-forge ipywidgets beakerx
+#RUN conda install -c conda-forge ipywidgets beakerx
 
 RUN pip install sparqlkernel && \
     jupyter sparqlkernel install
@@ -28,7 +29,7 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     lein install && \
     cd ..
 
-RUN jupyter nbextension enable beakerx --py --sys-prefix
+#RUN jupyter nbextension enable beakerx --py --sys-prefix
 
-RUN chown -R jovyan:users /home/jovyan/.local
+#RUN chown -R jovyan:users /home/jovyan/.local
 #USER jovyan
