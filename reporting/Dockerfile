@@ -27,3 +27,5 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     ./scripts/download/download-virtuoso-dependencies.sh mvn && \
     lein install && \
     cd ..
+
+USER $NB_USER
