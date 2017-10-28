@@ -28,5 +28,7 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     lein install && \
     cd ..
 
+RUN jupyter nbextension enable beakerx --py --sys-prefix
+
 RUN chown -R jovyan:users /home/jovyan/.local
 #USER jovyan
