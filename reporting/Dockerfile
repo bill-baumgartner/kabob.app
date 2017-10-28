@@ -28,4 +28,4 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     lein install && \
     cd ..
 
-USER $NB_USER
+USER jovyan
