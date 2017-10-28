@@ -28,4 +28,5 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     lein install && \
     cd ..
 
+RUN chown -R jovyan:users /home/jovyan/.local
 #USER jovyan
