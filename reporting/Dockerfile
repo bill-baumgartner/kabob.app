@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     wget
 
 # install Clojure/Leiningen
-RUN wget -q -O /usr/local/bin/lein https://raw.github.com/technomancy/leiningen/stable/bin/lein && \
+RUN wget -q -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/2.7.1/bin/lein && \
     chmod +x /usr/local/bin/lein
 
 # install kr
