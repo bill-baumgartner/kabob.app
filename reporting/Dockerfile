@@ -10,7 +10,8 @@ RUN pip install sparqlkernel && \
 
 RUN apt-get update && apt-get install -y \
     maven \
-    wget
+    wget \
+    vim
 
 # install Clojure/Leiningen
 RUN wget -q -O /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/2.7.1/bin/lein && \
