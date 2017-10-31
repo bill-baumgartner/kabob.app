@@ -38,8 +38,8 @@ RUN mv /home/beakerx/kabob.git/target/uberjar/kabob-2.0.0-SNAPSHOT-standalone.ja
     mkdir /home/beakerx/kabob-notebooks && \
     mkdir /home/beakerx/test-triple-files && \
     chown beakerx:beakerx /home/beakerx/beakerx/beakerx/static/kernel/clojure/lib/kabob-2.0.0-SNAPSHOT-standalone.jar && \
-    chown beakerx:beakerx /home/beakerx/kabob-notebooks && \
-    chown beakerx:beakerx /home/beakerx/test-triple-files
+    chown -R beakerx:beakerx /home/beakerx/kabob-notebooks && \
+    chown -R beakerx:beakerx /home/beakerx/test-triple-files
 
 
 
