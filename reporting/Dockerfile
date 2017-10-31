@@ -37,10 +37,7 @@ RUN mv /home/beakerx/kabob.git/target/uberjar/kabob-2.0.0-SNAPSHOT-standalone.ja
     sed -i 's/plexus-utils-3.0.jar/plexus-utils-3.0.jar:$APP_HOME\/lib\/kabob-2.0.0-SNAPSHOT-standalone.jar/' /home/beakerx/beakerx/beakerx/static/kernel/clojure/bin/clojure && \
     mkdir /home/beakerx/kabob-notebooks && \
     mkdir /home/beakerx/test-triple-files && \
-    chown beakerx:beakerx /home/beakerx/beakerx/beakerx/static/kernel/clojure/lib/kabob-2.0.0-SNAPSHOT-standalone.jar && \
-    chmod 777 -R /home/beakerx/kabob-notebooks && \
-    chmod 777 -R /home/beakerx/test-triple-files
-
+    chown beakerx:beakerx /home/beakerx/beakerx/beakerx/static/kernel/clojure/lib/kabob-2.0.0-SNAPSHOT-standalone.jar
 
 
 
