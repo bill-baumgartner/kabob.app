@@ -3,8 +3,6 @@ FROM beakerx/beakerx
 
 USER root
 
-#RUN conda install -c conda-forge ipywidgets beakerx
-
 RUN pip install sparqlkernel && \
     jupyter sparqlkernel install
 
@@ -32,7 +30,14 @@ RUN git clone https://github.com/bill-baumgartner/kabob.git ./kabob.git && \
     lein uberjar && \
     cd ..
 
-#RUN jupyter nbextension enable beakerx --py --sys-prefix
+# copy the kabob uberjar to the beaker lib directory and update the beakerx/clojure classpath to include it
+# delete the included httpclient and httpcore jars as newer versions are included in the kabob uberjar
+RUN mv /home/beakerx/kabob.git/target/uberjar/kabob-2.0.0-SNAPSHOT-standalone.jar /home/beakerx/beakerx/beakerx/static/kernel/clojure/lib && \
+    rm /home/beakerx/beakerx/beakerx/static/kernel/clojure/lib/http*.jar && \
+    sed -i 's/plexus-utils-3.0.jar/plexus-utils-3.0.jar:$APP_HOME/lib/kabob-2.0.0-SNAPSHOT-standalone.jar/' /home/beakerx/beakerx/beakerx/static/kernel/clojure/bin/clojure
 
-#RUN chown -R jovyan:users /home/jovyan/.local
-#USER jovyan
+
+
+
+
+
