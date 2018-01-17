@@ -27,6 +27,7 @@
 #trap '/stardog-${STARDOG_VERSION}/bin/stardog-admin server stop ; exit' 15
 
 # start blazegraph by starting jetty
+chown jetty:jetty /blazegraph-data
 cd /var/lib/jetty
 java -Dcom.bigdata.rdf.sail.webapp.ConfigParams.propertyFile=/RWStore.properties -Dlog4j.configuration=file:///log4j.properties -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar
 

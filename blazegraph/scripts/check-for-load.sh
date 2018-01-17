@@ -52,6 +52,8 @@ if [[ -z ${LOAD_REQUEST_DIRECTORY} || -z ${BLAZEGRAPH_PROPERTIES_FILE} || -z ${M
     exit 1
 fi
 
+chown jetty:jetty ${LOAD_REQUEST_DIRECTORY}
+
 inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
     while read path action file; do
         echo "The file '$file' appeared in directory '$path' via '$action'"
