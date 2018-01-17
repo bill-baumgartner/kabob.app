@@ -56,7 +56,7 @@ docker run -d -p 8889:8080 \
 
 # Log the port to the load-requests directory
 echo "final adjustments to the blazegraph container..."
-docker exec blazegraph-${KB_KEY} /bin/bash -c "/supervisord-config.sh"
+#docker exec blazegraph-${KB_KEY} /bin/bash -c "/supervisord-config.sh"
 docker exec blazegraph-${KB_KEY} /bin/bash -c "echo ${BLAZEGRAPH_PORT} > /blazegraph-load-requests/blazegraph.port"
 docker exec blazegraph-${KB_KEY} /bin/bash -c "echo 'blazegraph-${KB_KEY}' > /blazegraph-load-requests/blazegraph.container.name"
 
