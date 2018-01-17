@@ -33,23 +33,29 @@ fi
 
 # Create a Docker volume where blazegraph will store its data:
 # This directory must be aligned with the directory specified in the RWStore.properties file
+
+echo "Creating container for the blazegraph data..."
 docker create -v /blazegraph-data --name blazegraph-data-${KB_KEY} alpine:latest
 
 # Create a Docker volume where load requests can be placed
+echo "Creating container for the blazegraph load requests..."
 docker create -v /blazegraph-load-requests --name blazegraph-load-requests-${KB_KEY} alpine:latest
 
-# Build the Docker image (this will import the AllegroGraph Docker image): 
+# Build the Docker image (this will import the AllegroGraph Docker image):
+echo "Building the ccp/blazegraph image..."
 docker build -t ccp/blazegraph:v2.1.4 blazegraph/
 
 # Create a dedicated network so that other containers can talk to the agraph container
 #docker network create blazegraph-net-${KB_KEY}
 
 # Start up Blazegraph
+echo "Starting the blazegraph container..."
 docker run -d -p 8889:8080 \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4
 
 # Log the port to the load-requests directory
+echo "final adjustments to the blazegraph container..."
 docker exec blazegraph-${KB_KEY} /bin/bash -c "/supervisord-config.sh"
 docker exec blazegraph-${KB_KEY} /bin/bash -c "echo ${BLAZEGRAPH_PORT} > /blazegraph-load-requests/blazegraph.port"
 docker exec blazegraph-${KB_KEY} /bin/bash -c "echo 'blazegraph-${KB_KEY}' > /blazegraph-load-requests/blazegraph.container.name"
