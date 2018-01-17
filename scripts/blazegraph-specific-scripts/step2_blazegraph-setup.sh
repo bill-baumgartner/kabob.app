@@ -42,11 +42,10 @@ docker create -v /blazegraph-load-requests --name blazegraph-load-requests-${KB_
 docker build -t ccp/blazegraph:v2.1.4 blazegraph/
 
 # Create a dedicated network so that other containers can talk to the agraph container
-docker network create blazegraph-net-${KB_KEY}
+#docker network create blazegraph-net-${KB_KEY}
 
 # Start up Blazegraph
 docker run -d -p 8889:8080 \
-       --net blazegraph-net-${KB_KEY} \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4
 
