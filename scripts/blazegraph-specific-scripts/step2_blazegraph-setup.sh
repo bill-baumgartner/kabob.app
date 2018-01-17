@@ -45,8 +45,7 @@ docker build -t ccp/blazegraph:v2.1.4 blazegraph/
 docker network create blazegraph-net-${KB_KEY}
 
 # Start up Blazegraph
-docker run -d -p ${BLAZEGRAPH_PORT}:${BLAZEGRAPH_PORT} \
-       -e BLAZEGRAPH_PORT=${BLAZEGRAPH_PORT} \
+docker run -d -p 8889:8080 \
        --net blazegraph-net-${KB_KEY} \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4
