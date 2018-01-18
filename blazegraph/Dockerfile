@@ -16,6 +16,8 @@ COPY scripts/log4j.properties /
 COPY scripts/supervisord-config.sh /
 COPY scripts/supervisord.conf /etc/
 COPY scripts/init-blazegraph.sh scripts/check-for-load.sh /usr/bin/
+COPY scripts/run-loader.sh /
+COPY scripts/pom-blazegraph-loader.xml /
 
 RUN chmod 600 /etc/supervisord.conf && \
     chmod 755 /usr/bin/*.sh && \

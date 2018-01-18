@@ -104,7 +104,7 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
         # Only one process can access the Blazegraph journal file at a time.
         # After the load Jetty should be restarted.
         jetty_shutdown_command="java -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar --stop"
-        load_command="/kabob.git/scripts/loader/blazegraph/run-loader.sh -z /log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
+        load_command="/run-loader.sh -z /log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
         jetty_restart_command="supervisorctl -c /etc/supervisord.conf restart bg:"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
