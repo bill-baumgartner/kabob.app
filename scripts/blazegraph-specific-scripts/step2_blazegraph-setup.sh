@@ -46,7 +46,7 @@ echo "Building the ccp/blazegraph image..."
 docker build -t ccp/blazegraph:v2.1.4 blazegraph/
 
 # Create a dedicated network so that other containers can talk to the agraph container
-#docker network create blazegraph-net-${KB_KEY}
+docker network create blazegraph-net-${KB_KEY}
 
 # Start up Blazegraph
 echo "Starting the blazegraph container..."
