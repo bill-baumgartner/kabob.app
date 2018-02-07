@@ -51,6 +51,7 @@ docker build -t ccp/blazegraph:v2.1.4 blazegraph/
 # Start up Blazegraph
 echo "Starting the blazegraph container..."
 docker run -d -p 8889:8080 \
+       --net blazegraph-net-${KB_KEY} \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4
 

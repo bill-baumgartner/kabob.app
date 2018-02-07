@@ -41,4 +41,4 @@ if ! [[ -e README.md ]]; then
 fi
 
 # Build KaBOB using the RDF generated from downloaded data sources:
-docker run --rm --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} billbaumgartner/kabob-base:${VERSION} /kabob.git/scripts/docker/blazegraph-specific/build-from-scratch.sh ${KB_NAME}
+docker run --rm --net blazegraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} billbaumgartner/kabob-base:${VERSION} /kabob.git/scripts/docker/blazegraph-specific/build-from-scratch.sh ${KB_NAME}
