@@ -4,22 +4,24 @@ function print_usage {
     echo "Usage:"
     echo "$(basename $0) [OPTIONS]"
     echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
-    echo "  [-p <blazegraph-port>]: The port to use when starting blazegraph"
+    #echo "  [-p <blazegraph-port>]: The port to use when starting blazegraph"
 }
 
-while getopts "k:p:h" OPTION; do
+while getopts "k:h" OPTION; do
     case ${OPTION} in
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
            ;;
-        # port
-        p) BLAZEGRAPH_PORT=$OPTARG
-           ;;
+#        # port
+#        p) BLAZEGRAPH_PORT=$OPTARG
+#           ;;
         # HELP!
         h) print_usage; exit 0
            ;;
     esac
 done
+
+BLAZEGRAPH_PORT=8080
 
 if [[ -z ${KB_KEY} || -z ${BLAZEGRAPH_PORT} ]]; then
     print_usage
@@ -51,7 +53,6 @@ docker network create blazegraph-net-${KB_KEY}
 # Start up Blazegraph
 echo "Starting the blazegraph container..."
 docker run -d -p 8889:8080 \
-       -e BLAZEGRAPH_PORT=${BLAZEGRAPH_PORT} \
        --net blazegraph-net-${KB_KEY} \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4
