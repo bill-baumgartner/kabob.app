@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     inotify-tools \
     less
 
-ENV STARDOG_VERSION=5.2.1 \
+ENV STARDOG_VERSION=5.0.4 \
     STARDOG_HOME=/stardog-data
 
 
