@@ -9,6 +9,7 @@ RUN pip install sparqlkernel && \
 RUN apt-get update && apt-get install -y \
     maven \
     wget \
+    graphviz \
     vim
 
 # install Clojure/Leiningen
