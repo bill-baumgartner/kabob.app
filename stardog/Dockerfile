@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     supervisor \
     inotify-tools \
-    less
+    less \
+    vim
 
 ENV STARDOG_VERSION=5.2.2 \
     STARDOG_HOME=/stardog-data
