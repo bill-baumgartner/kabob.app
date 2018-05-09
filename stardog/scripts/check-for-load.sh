@@ -86,7 +86,7 @@ inotifywait -m $1 -e create,moved_to,attrib |
 		PARAMS="$PARAMS --remove-all"
 	    fi
 
-        load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
+        load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side --named-graph file://${file} -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
 	    
@@ -148,5 +148,55 @@ inotifywait -m $1 -e create,moved_to,attrib |
 		touch ${FAIL_FILE}
 	    fi
 	fi
+
+if [[ "$file" == *.optimize ]]
+	then
+	    echo "Processing request to optimize database: ${file}"
+	    SUCCESS_FILE="$path$file.success"
+        FAIL_FILE="$path$file.error"
+
+	    # remove any previous .success or .error files (in case
+	    # this is a retry of a previous load attempt)
+	    if [[ -f ${SUCCESS_FILE} ]]
+	    then
+		rm -f ${SUCCESS_FILE}
+	    fi
+	    if [[ -f ${FAIL_FILE} ]]
+	    then
+		rm -f ${FAIL_FILE}
+	    fi
+
+	    # extract the load parameters from the file name
+	    arr=($(echo $file | tr "." "\n"))
+	    for param in "${arr[@]}"; do
+		case ${param} in
+		    repo_*)
+			REPO_NAME=${param#"repo_"}
+			;;
+		esac
+	    done
+
+	    # check to make sure all required parameters have a value
+	    if [[ -z "$REPO_NAME" ]]; then
+		echo "Optimize database requires a repository name.
+                      Please make sure the .repo_[REPONAME] suffix is part of
+                      the load file name to indicate the Stardog repository name."
+		exit 1
+	    fi
+
+        optimize_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db optimize ${REPO_NAME}"
+
+	    echo "EXECUTING DATABASE OPTIMIZE COMMAND: ${optimize_command}"
+
+	    su -c "${optimize_command}" | tee ${path}${file}.log
+
+	    if [[ ${PIPESTATUS[0]} == 0 ]]
+	    then
+		touch ${SUCCESS_FILE}
+	    else
+		touch ${FAIL_FILE}
+	    fi
+	fi
+
 
     done
