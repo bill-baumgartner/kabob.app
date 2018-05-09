@@ -25,178 +25,177 @@ inotifywait -m $1 -e create,moved_to,attrib |
     while read path action file; do
         echo "The file '$file' appeared in directory '$path' via '$action'"
         if [[ "$file" == *.load ]]
-	then
-	    SUCCESS_FILE="$path$file.success"
+	    then
+	        SUCCESS_FILE="$path$file.success"
             FAIL_FILE="$path$file.error"
 
-	    # remove any previous .success or .error files (in case
-	    # this is a retry of a previous load attempt)
-	    if [[ -f $SUCCESS_FILE ]]
-	    then
-		rm -f $SUCCESS_FILE
-	    fi
-	    if [[ -f $FAIL_FILE ]]
-	    then
-		rm -f $FAIL_FILE
-	    fi
+            # remove any previous .success or .error files (in case
+            # this is a retry of a previous load attempt)
+            if [[ -f $SUCCESS_FILE ]]
+            then
+                rm -f $SUCCESS_FILE
+            fi
+            if [[ -f $FAIL_FILE ]]
+            then
+                rm -f $FAIL_FILE
+            fi
 
-	    unset SUPERSEDE_FLAG
+	        unset SUPERSEDE_FLAG
 	    
-	    # extract the load parameters from the file name
-	    arr=($(echo $file | tr "." "\n"))
-	    for param in "${arr[@]}"; do
-		case $param in
-		    port_*)
-			PORT=${param#"port_"}
-			;;
-		    format_*)
-			FORMAT=${param#"format_"}
-			;;
-		    repo_*)
-			REPO_NAME=${param#"repo_"}
-			;;
-		    supersede)
-			SUPERSEDE_FLAG="true"
-			;;
-		    catalog_*)
-			CATALOG=${param#"catalog_"}
-			;;
-		esac
-	    done
+            # extract the load parameters from the file name
+            arr=($(echo $file | tr "." "\n"))
+            for param in "${arr[@]}"; do
+                case $param in
+                    port_*)
+                    PORT=${param#"port_"}
+                    ;;
+                    format_*)
+                    FORMAT=${param#"format_"}
+                    ;;
+                    repo_*)
+                    REPO_NAME=${param#"repo_"}
+                    ;;
+                    supersede)
+                    SUPERSEDE_FLAG="true"
+                    ;;
+                    catalog_*)
+                    CATALOG=${param#"catalog_"}
+                    ;;
+                esac
+	        done
 
-	    # check to make sure all required parameters have a value
-	    if [[ -z "$PORT" || -z "$REPO_NAME" ]]; then
-		echo "Load file missing either the AllegroGraph port or repository name (or both). 
-                      Please make sure the .port_[PORT] and .repo_[REPONAME] suffixes are part of 
-                      the load file name to indicate the Allegrograph port and repository name, respectively."
-		exit 1
-	    fi
+            # check to make sure all required parameters have a value
+            if [[ -z "$PORT" || -z "$REPO_NAME" ]]; then
+                echo "Load file missing either the AllegroGraph port or repository name (or both).
+                              Please make sure the .port_[PORT] and .repo_[REPONAME] suffixes are part of
+                              the load file name to indicate the Allegrograph port and repository name, respectively."
+                exit 1
+            fi
 
-	    PARAMS=""
-	    if [[ ! -z "$FORMAT" ]]
-	    then
-		PARAMS="$PARAMS --input $FORMAT"
-	    fi
-	    if [[ ! -z "$CATALOG" ]]
-	    then
-		PARAMS="$PARAMS --catalog $CATALOG"
-	    fi
-	    if [[ ! -z "$SUPERSEDE_FLAG" ]]
-	    then
-		PARAMS="$PARAMS --remove-all"
-	    fi
+            PARAMS=""
+            if [[ ! -z "$FORMAT" ]]
+            then
+                PARAMS="$PARAMS --input $FORMAT"
+            fi
+            if [[ ! -z "$CATALOG" ]]
+            then
+                PARAMS="$PARAMS --catalog $CATALOG"
+            fi
+            if [[ ! -z "$SUPERSEDE_FLAG" ]]
+            then
+                PARAMS="$PARAMS --remove-all"
+            fi
 
-        load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side --named-graph file://${file} -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
+            load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side --named-graph file://${file} -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
 
-	    echo "EXECUTING LOAD COMMAND: $load_command" 
+	        echo "EXECUTING LOAD COMMAND: $load_command"
 	    
-	    su -c "$load_command" | tee ${path}${file}.log
+	        su -c "$load_command" | tee ${path}${file}.log
 	    
-	    if [[ ${PIPESTATUS[0]} == 0 ]]
-	    then
-		touch ${SUCCESS_FILE}
-	    else
-		touch ${FAIL_FILE}
-	    fi
-	fi
-
-	if [[ "$file" == *.create ]]
-	then
-	    echo "Processing request to create new database: ${file}"
-	    SUCCESS_FILE="$path$file.success"
-        FAIL_FILE="$path$file.error"
-
-	    # remove any previous .success or .error files (in case
-	    # this is a retry of a previous load attempt)
-	    if [[ -f ${SUCCESS_FILE} ]]
-	    then
-		rm -f ${SUCCESS_FILE}
-	    fi
-	    if [[ -f ${FAIL_FILE} ]]
-	    then
-		rm -f ${FAIL_FILE}
+            if [[ ${PIPESTATUS[0]} == 0 ]]
+            then
+                touch ${SUCCESS_FILE}
+            else
+                touch ${FAIL_FILE}
+            fi
 	    fi
 
-	    # extract the load parameters from the file name
-	    arr=($(echo $file | tr "." "\n"))
-	    for param in "${arr[@]}"; do
-		case ${param} in
-		    repo_*)
-			REPO_NAME=${param#"repo_"}
-			;;
-		esac
-	    done
+        if [[ "$file" == *.create ]]
+        then
+            echo "Processing request to create new database: ${file}"
+            SUCCESS_FILE="$path$file.success"
+            FAIL_FILE="$path$file.error"
 
-	    # check to make sure all required parameters have a value
-	    if [[ -z "$REPO_NAME" ]]; then
-		echo "Create database requires a repository name.
-                      Please make sure the .repo_[REPONAME] suffix is part of
-                      the load file name to indicate the Stardog repository name."
-		exit 1
-	    fi
+            # remove any previous .success or .error files (in case
+            # this is a retry of a previous load attempt)
+            if [[ -f ${SUCCESS_FILE} ]]
+            then
+                rm -f ${SUCCESS_FILE}
+            fi
+            if [[ -f ${FAIL_FILE} ]]
+            then
+                rm -f ${FAIL_FILE}
+            fi
 
-        create_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db create --name ${REPO_NAME}"
+            # extract the load parameters from the file name
+            arr=($(echo $file | tr "." "\n"))
+            for param in "${arr[@]}"; do
+                case ${param} in
+                    repo_*)
+                    REPO_NAME=${param#"repo_"}
+                    ;;
+                esac
+            done
 
-	    echo "EXECUTING DATABASE CREATION COMMAND: ${create_command}"
+            # check to make sure all required parameters have a value
+            if [[ -z "$REPO_NAME" ]]; then
+                echo "Create database requires a repository name.
+                              Please make sure the .repo_[REPONAME] suffix is part of
+                              the load file name to indicate the Stardog repository name."
+                exit 1
+            fi
 
-	    su -c "${create_command}" | tee ${path}${file}.log
+            create_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db create --name ${REPO_NAME}"
 
-	    if [[ ${PIPESTATUS[0]} == 0 ]]
-	    then
-		touch ${SUCCESS_FILE}
-	    else
-		touch ${FAIL_FILE}
-	    fi
-	fi
+            echo "EXECUTING DATABASE CREATION COMMAND: ${create_command}"
 
-if [[ "$file" == *.optimize ]]
-	then
-	    echo "Processing request to optimize database: ${file}"
-	    SUCCESS_FILE="$path$file.success"
-        FAIL_FILE="$path$file.error"
+            su -c "${create_command}" | tee ${path}${file}.log
 
-	    # remove any previous .success or .error files (in case
-	    # this is a retry of a previous load attempt)
-	    if [[ -f ${SUCCESS_FILE} ]]
-	    then
-		rm -f ${SUCCESS_FILE}
-	    fi
-	    if [[ -f ${FAIL_FILE} ]]
-	    then
-		rm -f ${FAIL_FILE}
-	    fi
+            if [[ ${PIPESTATUS[0]} == 0 ]]
+            then
+                touch ${SUCCESS_FILE}
+            else
+                touch ${FAIL_FILE}
+            fi
+        fi
 
-	    # extract the load parameters from the file name
-	    arr=($(echo $file | tr "." "\n"))
-	    for param in "${arr[@]}"; do
-		case ${param} in
-		    repo_*)
-			REPO_NAME=${param#"repo_"}
-			;;
-		esac
-	    done
+        if [[ "$file" == *.optimize ]]
+        then
+            echo "Processing request to optimize database: ${file}"
+            SUCCESS_FILE="$path$file.success"
+            FAIL_FILE="$path$file.error"
 
-	    # check to make sure all required parameters have a value
-	    if [[ -z "$REPO_NAME" ]]; then
-		echo "Optimize database requires a repository name.
-                      Please make sure the .repo_[REPONAME] suffix is part of
-                      the load file name to indicate the Stardog repository name."
-		exit 1
-	    fi
+            # remove any previous .success or .error files (in case
+            # this is a retry of a previous load attempt)
+            if [[ -f ${SUCCESS_FILE} ]]
+            then
+                rm -f ${SUCCESS_FILE}
+            fi
+            if [[ -f ${FAIL_FILE} ]]
+            then
+                rm -f ${FAIL_FILE}
+            fi
 
-        optimize_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db optimize ${REPO_NAME}"
+            # extract the load parameters from the file name
+            arr=($(echo $file | tr "." "\n"))
+            for param in "${arr[@]}"; do
+                case ${param} in
+                    repo_*)
+                    REPO_NAME=${param#"repo_"}
+                    ;;
+                esac
+            done
 
-	    echo "EXECUTING DATABASE OPTIMIZE COMMAND: ${optimize_command}"
+            # check to make sure all required parameters have a value
+            if [[ -z "$REPO_NAME" ]]; then
+                echo "Optimize database requires a repository name.
+                              Please make sure the .repo_[REPONAME] suffix is part of
+                              the load file name to indicate the Stardog repository name."
+                exit 1
+            fi
 
-	    su -c "${optimize_command}" | tee ${path}${file}.log
+            optimize_command="/stardog-${STARDOG_VERSION}/bin/stardog-admin db optimize ${REPO_NAME}"
 
-	    if [[ ${PIPESTATUS[0]} == 0 ]]
-	    then
-		touch ${SUCCESS_FILE}
-	    else
-		touch ${FAIL_FILE}
-	    fi
-	fi
+            echo "EXECUTING DATABASE OPTIMIZE COMMAND: ${optimize_command}"
 
+            su -c "${optimize_command}" | tee ${path}${file}.log
+
+            if [[ ${PIPESTATUS[0]} == 0 ]]
+            then
+                touch ${SUCCESS_FILE}
+            else
+                touch ${FAIL_FILE}
+            fi
+        fi
 
     done
