@@ -88,7 +88,7 @@ inotifywait -m $1 -e create,moved_to,attrib |
 
             # get the name of the file being loaded from the load request file; it will be the only thing in the file
             source_file=$(cat ${path}${file})
-            graph_name=$(echo $(basename "${source_file%.*}"))
+            graph_name=$(echo $(basename "${source_file##*/}"))
             load_command="/stardog-${STARDOG_VERSION}/bin/stardog data add ${REPO_NAME} --server-side --named-graph file://${graph_name} -f ${FORMAT} $(cat ${path}${file} | tr \\n ' ')"
 
 	        echo "EXECUTING LOAD COMMAND: $load_command"
