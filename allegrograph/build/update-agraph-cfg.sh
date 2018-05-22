@@ -8,7 +8,7 @@
 
 source /config/user-env.sh
 PORT_MINUS_ONE=`expr $PLATFORM_ALLEGROGRAPH_PORT - 1`
-content=$(cat /data/agraph.cfg)
+content=$(cat /data/etc/agraph.cfg)
 echo -en "$AG_LICENSE_HEADER\n$content" > /config/agraph.cfg
 sed -i 's/SuperUser test:xyzzy/SuperUser '"$AG_USERPASS"'/g' /config/agraph.cfg
 sed -i 's/Port 10035/Port '"$PLATFORM_ALLEGROGRAPH_PORT"'/g' /config/agraph.cfg
