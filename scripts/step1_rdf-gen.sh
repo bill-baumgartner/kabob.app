@@ -22,10 +22,11 @@ function print_usage {
     echo "  [-c <container-count>]: The number of processes to spin up (as individual containers) when generating RDF. This count should be between 1 and 5."
     echo "  [-d <drugbank XML file path>]: OPTIONAL -- The local path to the DrugBank 'full database.xml' file. This file requires user registration to download, and therefore must be supplied by the user. This parameter is optional. If not provided, then the DrugBank resource simply will not be included in this build of KaBOB."
     echo "  [-p <pharmgkb relationships file path>]: OPTIONAL -- The local path to the PharmGKB relationships file (relationships.tsv). This file requires a PharmGKB license, and therefore must be supplied by the user. This parameter is optional. If not provided, then the PharmGKB relationships simply will not be included in this build of KaBOB."
+    echo "  [-t <curated TF file path>]: OPTIONAL -- The local path to a file containing curated TF data."
     echo "  [-v <kabob docker image version>]: The version of the kabob docker image to use."
 }
 
-while getopts "k:c:d:p:v:h" OPTION; do
+while getopts "k:c:d:p:t:v:h" OPTION; do
     case ${OPTION} in
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
@@ -44,7 +45,11 @@ while getopts "k:c:d:p:v:h" OPTION; do
         # PharmGKB relationships resource simply will not be included in this build of KaBOB.
         p) PHARMGKB_RELATIONS_FILE=$OPTARG
            ;;
-           # kabob docker image version
+        # OPTIONAL -- The local path to the curated TF data file. This is a custom file that is not available publicly
+        # at this time.
+        t) CURATED_TF_FILE=$OPTARG
+           ;;
+        # kabob docker image version
         v) VERSION=$OPTARG
            ;;
         # HELP!
@@ -81,6 +86,15 @@ if [[ ${PHARMGKB_RELATIONS_FILE} ]]; then
     docker cp "${PHARMGKB_RELATIONS_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/pharmgkb/relationships.tsv'
     docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:${VERSION} sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/pharmgkb/relationships.tsv"'
 fi
+
+# if provided, copy the curated TF file into the /kabob_data container and create a metadata file (.ready)
+if [[ ${CURATED_TF_FILE} ]]; then
+    echo "Copying Curated TF file ($CURATED_TF_FILE) into Docker volume with key: $KB_KEY"
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:${VERSION} sh -c 'mkdir -p /kabob_data/raw/ccp'
+    docker cp "${CURATED_TF_FILE}" kabob_data-${KB_KEY}:'/kabob_data/raw/ccp/curated_tfs.tsv'
+    docker run --rm --volumes-from kabob_data-${KB_KEY} billbaumgartner/kabob-base:${VERSION} sh -c '/kabob.git/scripts/download/create-metadata-file.sh "/kabob_data/raw/ccp/curated_tfs.tsv"'
+fi
+
 
 #  Initial setup (downloads ontologies used by KaBOB):
 docker run --rm --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:${VERSION} ./setup.sh
