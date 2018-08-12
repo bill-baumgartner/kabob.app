@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     less \
     vim
 
-ENV STARDOG_VERSION=5.3.1 \
+ENV STARDOG_VERSION=5.3.3 \
     STARDOG_HOME=/stardog-data
 
 
