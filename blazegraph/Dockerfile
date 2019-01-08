@@ -26,6 +26,7 @@ RUN chmod 600 /etc/supervisord.conf && \
     mkdir /blazegraph-data && \
     chown jetty:jetty /blazegraph-data && \
     mkdir /blazegraph-load-requests && \
-    chown jetty:jetty /blazegraph-load-requests
+    chown jetty:jetty /blazegraph-load-requests && \
+    sysctl -w vm.swappiness=0
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
