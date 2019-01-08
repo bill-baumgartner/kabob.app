@@ -1,4 +1,4 @@
-FROM lyrasis/blazegraph:2.1.4
+FROM lyrasis/blazegraph:2.1.4.NOSWAP
 
 USER root
 RUN apk --no-cache add \
@@ -26,7 +26,6 @@ RUN chmod 600 /etc/supervisord.conf && \
     mkdir /blazegraph-data && \
     chown jetty:jetty /blazegraph-data && \
     mkdir /blazegraph-load-requests && \
-    chown jetty:jetty /blazegraph-load-requests && \
-    sysctl -w vm.swappiness=0
+    chown jetty:jetty /blazegraph-load-requests
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]

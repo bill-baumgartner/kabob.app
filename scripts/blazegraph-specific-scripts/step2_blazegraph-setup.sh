@@ -36,6 +36,17 @@ fi
 # Create a Docker volume where blazegraph will store its data:
 # This directory must be aligned with the directory specified in the RWStore.properties file
 
+# --cap-add=SYS_ADMIN is required in order to make /sys writeable
+# after updating, /sys is made read-only once again
+docker run -d --cap-add=SYS_ADMIN --name bg-${KB_KEY} lyrasis/blazegraph:2.1.4
+docker exec bg-${KB_KEY}  /bin/bash -c "mount -o remount,rw /sys ;
+                                   sysctl -w vm.swappiness=0 ;
+                                   mount -o remount,ro /sys;"
+## commit a new image with THP disabled
+docker commit bg-${KB_KEY} lyrasis/blazegraph:2.1.4.NOSWAP
+docker stop bg-${KB_KEY}
+docker rm bg-${KB_KEY}
+
 echo "Creating container for the blazegraph data..."
 docker create -v /blazegraph-data --name blazegraph-data-${KB_KEY} alpine:latest
 
