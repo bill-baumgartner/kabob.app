@@ -1,4 +1,4 @@
-FROM lyrasis/blazegraph:2.1.4.NOSWAP
+FROM lyrasis/blazegraph:2.1.4
 
 USER root
 RUN apk --no-cache add \
