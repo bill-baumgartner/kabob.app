@@ -21,6 +21,7 @@ RUN chmod 600 /etc/supervisord.conf && \
     mkdir /blazegraph-data && \
     chown developer:developer /blazegraph-data && \
     mkdir /blazegraph-load-requests && \
-    chown developer:developer /blazegraph-load-requests
+    chown developer:developer /blazegraph-load-requests && \
+    ln -s /usr/jdk1.8.0_191/bin/java /usr/bin/java
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
