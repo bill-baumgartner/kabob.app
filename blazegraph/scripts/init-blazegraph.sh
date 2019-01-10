@@ -31,7 +31,7 @@ chown developer:developer /blazegraph-data
 #cd /var/lib/jetty
 #java -Xmx40G -XX:MaxDirectMemorySize=40G -Dcom.bigdata.rdf.sail.webapp.ConfigParams.propertyFile=/RWStore.properties -Dlog4j.configuration=file:///log4j.properties -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar
 
-java -server -Xmx4g -jar -Dbigdata.propertyFile=/home/developer/blazegraph/conf/RWStore.properties /home/developer/blazegraph/blazegraph.jar
+java -server -Xmx40g -jar -Dbigdata.propertyFile=/home/developer/blazegraph/conf/RWStore.properties /home/developer/blazegraph/blazegraph.jar
 
 ## create a symbolic link to the deployed blazegraph lib/ directory to /blazegraph-lib
 #CP_DIR=$(grep bigdata.war /var/log/supervisor/blazegraph_process.err.log | cut -f 2 -d "{" | cut -f 2 -d "," | cut -f 3- -d "/")
