@@ -103,13 +103,15 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
         # prior to the load, the Blazegraph web UI (run via Jetty) must be shut down.
         # Only one process can access the Blazegraph journal file at a time.
         # After the load Jetty should be restarted.
-        jetty_shutdown_command="java -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar --stop"
-        load_command="/run-loader.sh -z /log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
-        jetty_restart_command="supervisorctl -c /etc/supervisord.conf restart bg:"
+        #jetty_shutdown_command="java -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar --stop"
+        load_command="/run-loader.sh -z /home/developer/blazegraph/conf/log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
+        #jetty_restart_command="supervisorctl -c /etc/supervisord.conf restart bg:"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
 	    
-	    su -c "${jetty_shutdown_command} && ${load_command} && ${jetty_restart_command}" | tee ${path}${file}.log
+	    #su -c "${jetty_shutdown_command} && ${load_command} && ${jetty_restart_command}" | tee ${path}${file}.log
+
+        su -c "${load_command}" | tee ${path}${file}.log
 
 	    echo "======================================================================"
 	    echo "============= Load complete. Jetty/Blazegraph restarted. ============="

@@ -21,7 +21,8 @@ while getopts "k:h" OPTION; do
     esac
 done
 
-BLAZEGRAPH_PORT=8080
+#BLAZEGRAPH_PORT=8080
+BLAZEGRAPH_PORT=9999
 
 if [[ -z ${KB_KEY} || -z ${BLAZEGRAPH_PORT} ]]; then
     print_usage
@@ -52,7 +53,8 @@ docker network create blazegraph-net-${KB_KEY}
 
 # Start up Blazegraph
 echo "Starting the blazegraph container..."
-docker run -d -p 8889:8080 \
+#docker run -d -p 8889:8080 \
+docker run -d -p 8889:9999 \
        --net blazegraph-net-${KB_KEY} \
        --volumes-from blazegraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} \
        --name blazegraph-${KB_KEY} ccp/blazegraph:v2.1.4

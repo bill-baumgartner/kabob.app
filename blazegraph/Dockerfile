@@ -1,18 +1,13 @@
-FROM lyrasis/blazegraph:2.1.4
+FROM openkbs/blazegraph:latest
 
 USER root
-RUN apk --no-cache add \
-    unzip \
+RUN apt-get update && apt-get install -y \
     supervisor \
-    inotify-tools \
-    less \
-    vim \
-    maven \
-    bash
+    inotify-tools
 
 # the following supplants the existing RWStore.properties file
-COPY scripts/RWStore.properties /
-COPY scripts/log4j.properties /
+COPY scripts/RWStore.properties /home/developer/blazegraph/conf
+COPY scripts/log4j.properties /home/developer/blazegraph/conf
 COPY scripts/supervisord-config.sh /
 COPY scripts/supervisord.conf /etc/
 COPY scripts/init-blazegraph.sh scripts/check-for-load.sh /usr/bin/
@@ -24,8 +19,8 @@ RUN chmod 600 /etc/supervisord.conf && \
     chmod 755 /supervisord-config.sh && \
     mkdir /var/log/supervisor && \
     mkdir /blazegraph-data && \
-    chown jetty:jetty /blazegraph-data && \
+    chown developer:developer /blazegraph-data && \
     mkdir /blazegraph-load-requests && \
-    chown jetty:jetty /blazegraph-load-requests
+    chown developer:developer /blazegraph-load-requests
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
