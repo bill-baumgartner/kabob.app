@@ -104,8 +104,41 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
         # Only one process can access the Blazegraph journal file at a time.
         # After the load Jetty should be restarted.
         #jetty_shutdown_command="java -DSTOP.KEY=KEY -DSTOP.PORT=2222 -jar /usr/local/jetty/start.jar --stop"
-        load_command="/run-loader.sh -z /home/developer/blazegraph/conf/log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
+        #load_command="/run-loader.sh -z /home/developer/blazegraph/conf/log4j.properties -g file://$(head -n 1 ${path}${file}) -f ${FORMAT} -r ${REPO_NAME} -p ${BLAZEGRAPH_PROPERTIES_FILE} -m ${MAVEN} -l $(head -n 1 ${path}${file})"
         #jetty_restart_command="supervisorctl -c /etc/supervisord.conf restart bg:"
+
+
+        # Use REST API for bulk data load
+        cat <<EOF > ${LOAD_REQUEST_DIRECTORY}/dataloader.xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+	  <properties>
+	      <!-- RDF Format (Default is rdf/xml) -->
+	      <entry key="format">${FORMAT}</entry>
+	      <!-- Base URI (Optional) -->
+	      <entry key="baseURI"></entry>
+	      <!-- Default Graph URI (Optional - Required for quads mode namespace) -->
+	      <entry key="defaultGraph">file://$(head -n 1 ${path}${file})</entry>
+	      <!-- Suppress all stdout messages (Optional) -->
+	      <entry key="quiet">false</entry>
+	      <!-- Show additional messages detailing the load performance. (Optional) -->
+	      <entry key="verbose">0</entry>
+	     <!-- Compute the RDF(S)+ closure. (Optional) -->
+             <entry key="closure">false</entry>
+	     <!-- Files will be renamed to either .good or .fail as they are processed.
+                   The files will remain in the same directory. -->
+	     <entry key="durableQueues">false</entry>
+	     <!-- The namespace of the KB instance. Defaults to kb. -->
+	     <entry key="namespace">${REPO_NAME}</entry>
+	     <!-- The configuration file for the database instance. It must be readable by the web application. -->
+             <entry key="propertyFile">${BLAZEGRAPH_PROPERTIES_FILE}</entry>
+	     <!-- Zero or more files or directories containing the data to be loaded.
+                   This should be a comma delimited list. The files must be readable by the web application. -->
+           <entry key="fileOrDirs">$(head -n 1 ${path}${file})</entry>
+      </properties>
+EOF
+
+        load_command="curl -X POST --data-binary @${LOAD_REQUEST_DIRECTORY}/dataloader.xml --header 'Content-Type:application/xml' http://localhost:9999/bigdata/dataloader | tee ${path}${file}.log"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
 	    
@@ -113,9 +146,9 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
 
         su -c "${load_command}" | tee ${path}${file}.log
 
-	    echo "======================================================================"
-	    echo "============= Load complete. Jetty/Blazegraph restarted. ============="
-	    echo "======================================================================"
+	    echo "==========================================="
+	    echo "============= Load complete.  ============="
+	    echo "==========================================="
 
 	    if [[ ${PIPESTATUS[0]} == 0 ]]
 	    then
