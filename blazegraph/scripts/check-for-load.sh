@@ -138,7 +138,7 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
       </properties>
 EOF
 
-        load_command="curl -X POST --data-binary @${LOAD_REQUEST_DIRECTORY}/dataloader.xml --header 'Content-Type:application/xml' http://localhost:9999/bigdata/dataloader | tee ${path}${file}.log"
+        load_command="curl -X POST --data-binary @${LOAD_REQUEST_DIRECTORY}/dataloader.xml --header 'Content-Type:application/xml' http://localhost:9999/blazegraph/dataloader | tee ${path}${file}.log"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
 	    
