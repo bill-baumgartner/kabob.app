@@ -17,7 +17,7 @@ COPY scripts/pom-blazegraph-loader.xml /
 RUN chmod 600 /etc/supervisord.conf && \
     chmod 755 /usr/bin/*.sh && \
     chmod 755 /supervisord-config.sh && \
-    mkdir /var/log/supervisor && \
+    mkdir -p /var/log/supervisor && \
     mkdir /blazegraph-data && \
     chown developer:developer /blazegraph-data && \
     mkdir /blazegraph-load-requests && \
