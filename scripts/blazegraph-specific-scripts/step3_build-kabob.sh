@@ -19,7 +19,7 @@ while getopts "k:c:v:h" OPTION; do
         k) KB_KEY=$OPTARG
            ;;
         # The shell command to run
-        n) SHELL_COMMAND=$OPTARG
+        c) SHELL_COMMAND=$OPTARG
            ;;
         # kabob docker image version
         v) VERSION=$OPTARG
