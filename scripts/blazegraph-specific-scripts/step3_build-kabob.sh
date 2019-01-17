@@ -40,5 +40,5 @@ if ! [[ -e README.md ]]; then
     exit 1
 fi
 
-echo 'executing: docker run --rm --net blazegraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} billbaumgartner/kabob-base:${VERSION} "${SHELL_COMMAND}"'
-docker run --rm --net blazegraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} billbaumgartner/kabob-base:${VERSION} "${SHELL_COMMAND}"
+
+docker run --rm --net blazegraph-net-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from blazegraph-load-requests-${KB_KEY} billbaumgartner/kabob-base:${VERSION} ${SHELL_COMMAND}
