@@ -6,21 +6,19 @@
 
 function print_usage {
     echo "Usage:"
-    echo "$(basename $0) [OPTIONS]"
+    echo "$(basename $0) [OPTIONS] [COMMAND]"
     echo "  [-k <kb-key>]: A unique key that will be used to name docker containers for this build"
-    echo "  [-c <command-to-run>]: The shell command to run, e.g. boot..."
     echo "  [-v <kabob docker image version>]: The version of the kabob docker image to use."
+    echo "  [COMMAND]: the command to send the docker container"
 
 }
 
-while getopts "k:c:v:h" OPTION; do
+while getopts "k:v:h" OPTION; do
     case ${OPTION} in
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
            ;;
-        # The shell command to run
-        c) SHELL_COMMAND=$OPTARG
-           ;;
+
         # kabob docker image version
         v) VERSION=$OPTARG
            ;;
@@ -29,6 +27,8 @@ while getopts "k:c:v:h" OPTION; do
            ;;
     esac
 done
+shift $(expr $OPTIND - 1 )
+SHELL_COMMAND="$@"
 
 if [[ -z ${KB_KEY} || -z ${SHELL_COMMAND} || -z ${VERSION} ]]; then
     print_usage
