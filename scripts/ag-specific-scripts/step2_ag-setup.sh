@@ -62,7 +62,7 @@ docker rm agraph-${KB_KEY}
 docker create --name agraph-data-${KB_KEY} franzinc/agraph-data
 
 # Create a Docker volume where load requests can be placed
-docker create -v /kabob-load-requests --name ag-load-requests-${KB_KEY} ubuntu:latest
+docker create -v /kabob-load-requests --name agraph-load-requests-${KB_KEY} ubuntu:latest
 
 # Build the Docker image (this will import the AllegroGraph Docker image): 
 docker build -t ccp/agraph:v6.4.5 allegrograph/build/
@@ -75,7 +75,7 @@ docker run -d -p 10000-${PLATFORM_ALLEGROGRAPH_PORT}:10000-${PLATFORM_ALLEGROGRA
        --net agraph-net-${KB_KEY} \
        --shm-size 1g \
        -m 1g \
-       --volumes-from agraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from ag-load-requests-${KB_KEY} \
+       --volumes-from agraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from agraph-load-requests-${KB_KEY} \
        --name agraph-${KB_KEY} ccp/agraph:v6.4.5
 
 # Log the AllegroGraph port to the kabob-load-requests directory

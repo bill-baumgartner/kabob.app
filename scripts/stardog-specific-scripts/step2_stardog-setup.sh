@@ -44,7 +44,7 @@ fi
 docker create -v /stardog-data --name stardog-data-${KB_KEY} ubuntu:latest
 
 # Create a Docker volume where load requests can be placed
-docker create -v /stardog-load-requests --name stardog-load-requests-${KB_KEY} ubuntu:latest
+docker create -v /kabob-load-requests --name stardog-load-requests-${KB_KEY} ubuntu:latest
 
 # Build the Docker image (this will import the AllegroGraph Docker image): 
 docker build -t ccp/stardog:v5.0 stardog/
@@ -59,7 +59,7 @@ docker run -d -p ${STARDOG_PORT}:${STARDOG_PORT} \
        --volumes-from stardog-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from stardog-load-requests-${KB_KEY} \
        --name stardog-${KB_KEY} ccp/stardog:v5.0
 
-# Log the AllegroGraph port to the ag-load-requests directory
-docker exec stardog-${KB_KEY} /bin/bash -c "echo ${STARDOG_PORT} > /stardog-load-requests/stardog.port"
-docker exec stardog-${KB_KEY} /bin/bash -c "echo 'stardog-${KB_KEY}' > /stardog-load-requests/stardog.container.name"
+# Log the AllegroGraph port to the kabob-load-requests directory
+docker exec stardog-${KB_KEY} /bin/bash -c "echo ${STARDOG_PORT} > /kabob-load-requests/stardog.port"
+docker exec stardog-${KB_KEY} /bin/bash -c "echo 'stardog-${KB_KEY}' > /kabob-load-requests/stardog.container.name"
 
