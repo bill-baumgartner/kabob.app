@@ -78,7 +78,7 @@ docker run -d -p 10000-${PLATFORM_ALLEGROGRAPH_PORT}:10000-${PLATFORM_ALLEGROGRA
        --volumes-from agraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from ag-load-requests-${KB_KEY} \
        --name agraph-${KB_KEY} ccp/agraph:v6.4.5
 
-# Log the AllegroGraph port to the ag-load-requests directory
-docker exec agraph-${KB_KEY} /bin/bash -c "echo ${PLATFORM_ALLEGROGRAPH_PORT} > /ag-load-requests/agraph.port"
-docker exec agraph-${KB_KEY} /bin/bash -c "echo 'agraph-${KB_KEY}' > /ag-load-requests/agraph.container.name"
+# Log the AllegroGraph port to the kabob-load-requests directory
+docker exec agraph-${KB_KEY} /bin/bash -c "echo ${PLATFORM_ALLEGROGRAPH_PORT} > /kabob-load-requests/agraph.port"
+docker exec agraph-${KB_KEY} /bin/bash -c "echo 'agraph-${KB_KEY}' > /kabob-load-requests/agraph.container.name"
 
