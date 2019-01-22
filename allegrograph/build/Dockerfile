@@ -1,4 +1,4 @@
-FROM franzinc/agraph:v6.4.1.THP_disabled
+FROM franzinc/agraph:v6.4.5.THP_disabled
 
 # install supervisor & inotify-tools
 RUN yum install -y epel-release && \

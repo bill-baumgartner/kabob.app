@@ -46,26 +46,26 @@ source allegrograph/build/config/user-env.sh
 #
 # --cap-add=SYS_ADMIN is required in order to make /sys writeable
 # after THP has been disabled, /sys is made read-only once again
-#docker run -d --cap-add=SYS_ADMIN --name agraph-${KB_KEY} franzinc/agraph:v6.4.1
-#docker exec agraph-${KB_KEY}  /bin/bash -c "yum install -y mount;
-#                                  mount -o remount,rw /sys ;
-#                                  echo never > /sys/kernel/mm/transparent_hugepage/enabled ;
-#                                  echo never > /sys/kernel/mm/transparent_hugepage/defrag ;
-#                                  mount -o remount,ro /sys;
-#                                  /app/agraph/bin/agraph-control --config /data/etc/agraph.cfg stop"
-## commit a new image with THP disabled
-#docker commit agraph-${KB_KEY} franzinc/agraph:v6.4.1.THP_disabled
-#docker stop agraph-${KB_KEY}
-#docker rm agraph-${KB_KEY}
+docker run -d -m 1g -p 10000-10035:10000-10035 --shm-size 1g --cap-add=SYS_ADMIN --name agraph-${KB_KEY} franzinc/agraph:v6.4.5
+docker exec agraph-${KB_KEY}  /bin/bash -c "yum install -y mount;
+                                  mount -o remount,rw /sys ;
+                                  echo never > /sys/kernel/mm/transparent_hugepage/enabled ;
+                                  echo never > /sys/kernel/mm/transparent_hugepage/defrag ;
+                                  mount -o remount,ro /sys;
+                                  /app/agraph/bin/agraph-control --config /data/etc/agraph.cfg stop"
+# commit a new image with THP disabled
+docker commit agraph-${KB_KEY} franzinc/agraph:v6.4.5.THP_disabled
+docker stop agraph-${KB_KEY}
+docker rm agraph-${KB_KEY}
 
 # Create a Docker volume where AllegroGraph will store its data: 
 docker create --name agraph-data-${KB_KEY} franzinc/agraph-data
 
 # Create a Docker volume where load requests can be placed
-docker create -v /ag-load-requests --name ag-load-requests-${KB_KEY} ubuntu:latest
+docker create -v /kabob-load-requests --name ag-load-requests-${KB_KEY} ubuntu:latest
 
 # Build the Docker image (this will import the AllegroGraph Docker image): 
-docker build -t franzinc/agraph:v6.4.1 allegrograph/build/
+docker build -t ccp/agraph:v6.4.5 allegrograph/build/
 
 # Create a dedicated network so that other containers can talk to the agraph container
 docker network create agraph-net-${KB_KEY}
@@ -74,8 +74,9 @@ docker network create agraph-net-${KB_KEY}
 docker run -d -p 10000-${PLATFORM_ALLEGROGRAPH_PORT}:10000-${PLATFORM_ALLEGROGRAPH_PORT} \
        --net agraph-net-${KB_KEY} \
        --shm-size 1g \
+       -m 1g \
        --volumes-from agraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from ag-load-requests-${KB_KEY} \
-       --name agraph-${KB_KEY} franzinc/agraph:v6.4.1
+       --name agraph-${KB_KEY} ccp/agraph:v6.4.5
 
 # Log the AllegroGraph port to the ag-load-requests directory
 docker exec agraph-${KB_KEY} /bin/bash -c "echo ${PLATFORM_ALLEGROGRAPH_PORT} > /ag-load-requests/agraph.port"
