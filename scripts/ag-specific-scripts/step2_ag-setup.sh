@@ -73,8 +73,8 @@ docker network create agraph-net-${KB_KEY}
 # Start up AllegroGraph
 docker run -d -p 10000-${PLATFORM_ALLEGROGRAPH_PORT}:10000-${PLATFORM_ALLEGROGRAPH_PORT} \
        --net agraph-net-${KB_KEY} \
-       --shm-size 1g \
-       -m 1g \
+       --shm-size 10g \
+       -m 60g \
        --volumes-from agraph-data-${KB_KEY} --volumes-from kabob_data-${KB_KEY} --volumes-from agraph-load-requests-${KB_KEY} \
        --name agraph-${KB_KEY} ccp/agraph:v6.4.5
 
