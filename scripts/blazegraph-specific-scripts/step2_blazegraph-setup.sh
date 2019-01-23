@@ -42,7 +42,7 @@ docker create -v /blazegraph-data --name blazegraph-data-${KB_KEY} alpine:latest
 
 # Create a Docker volume where load requests can be placed
 echo "Creating container for the blazegraph load requests..."
-docker create -v /blazegraph-load-requests --name blazegraph-load-requests-${KB_KEY} alpine:latest
+docker create -v /kabob-load-requests --name blazegraph-load-requests-${KB_KEY} alpine:latest
 
 # Build the Docker image (this will import the AllegroGraph Docker image):
 echo "Building the ccp/blazegraph image..."
@@ -64,6 +64,6 @@ echo "final adjustments to the blazegraph container..."
 # pause is required to allow the blazegraph container to initialize prior to running echo_supervisord_conf
 sleep 5
 docker exec blazegraph-${KB_KEY} /bin/bash -c "/supervisord-config.sh"
-docker exec blazegraph-${KB_KEY} /bin/bash -c "echo ${BLAZEGRAPH_PORT} > /blazegraph-load-requests/blazegraph.port"
-docker exec blazegraph-${KB_KEY} /bin/bash -c "echo 'blazegraph-${KB_KEY}' > /blazegraph-load-requests/blazegraph.container.name"
+docker exec blazegraph-${KB_KEY} /bin/bash -c "echo ${BLAZEGRAPH_PORT} > /kabob-load-requests/blazegraph.port"
+docker exec blazegraph-${KB_KEY} /bin/bash -c "echo 'blazegraph-${KB_KEY}' > /kabob-load-requests/blazegraph.container.name"
 
