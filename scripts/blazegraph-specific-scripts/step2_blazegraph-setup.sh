@@ -12,9 +12,6 @@ while getopts "k:h" OPTION; do
         # A unique key that will be used to name docker containers for this build
         k) KB_KEY=$OPTARG
            ;;
-#        # port
-#        p) BLAZEGRAPH_PORT=$OPTARG
-#           ;;
         # HELP!
         h) print_usage; exit 0
            ;;
