@@ -14,10 +14,10 @@ COPY scripts/init-blazegraph.sh scripts/check-for-load.sh /usr/bin/
 COPY scripts/run-loader.sh /
 COPY scripts/pom-blazegraph-loader.xml /
 
-RUN usermod -a -G 9001 developer && \
-    chmod 600 /etc/supervisord.conf && \
+RUN chmod 600 /etc/supervisord.conf && \
     chmod 755 /usr/bin/*.sh && \
     chmod 755 /supervisord-config.sh && \
+    #usermod -a -G 9001 developer && \
     mkdir -p /var/log/supervisor && \
     mkdir /blazegraph-data && \
     chown developer:developer /blazegraph-data && \
