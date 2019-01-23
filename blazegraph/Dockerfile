@@ -21,9 +21,9 @@ RUN usermod -a -G 9001 developer && \
     mkdir -p /var/log/supervisor && \
     mkdir /blazegraph-data && \
     chown developer:developer /blazegraph-data && \
-    mkdir /blazegraph-load-requests && \
-    chown -R :9001 /blazegraph-load-requests && \
-    chmod g+s /blazegraph-load-requests && \
+    mkdir /kabob-load-requests && \
+    chown -R :9001 /kabob-load-requests && \
+    chmod g+s /kabob-load-requests && \
     ln -s /usr/jdk1.8.0_191/bin/java /usr/bin/java
 
 CMD ["/usr/bin/supervisord","-c","/etc/supervisord.conf"]
