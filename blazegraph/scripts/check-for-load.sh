@@ -88,9 +88,10 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
 
 	    # check to make sure all required parameters have a value
 	    if [[ -z "$REPO_NAME" || -z "$FORMAT" ]]; then
-		echo "Load file missing either the AllegroGraph port or repository name (or both). 
+		echo "Load file (${file}) missing either the port or repository name (or both).
                       Please make sure the .port_[PORT] and .repo_[REPONAME] suffixes are part of 
                       the load file name to indicate the Allegrograph port and repository name, respectively."
+        rm ${file}
 		exit 1
 	    fi
 
@@ -138,6 +139,8 @@ inotifywait -m ${LOAD_REQUEST_DIRECTORY} -e create,moved_to,attrib |
       </properties>
 EOF
 
+
+
         load_command="curl -X POST --data-binary @${LOAD_REQUEST_DIRECTORY}/dataloader.xml --header 'Content-Type:application/xml' http://localhost:9999/blazegraph/dataloader | tee ${path}${file}.log"
 
 	    echo "EXECUTING LOAD COMMAND: $load_command" 
@@ -149,6 +152,10 @@ EOF
 	    echo "==========================================="
 	    echo "============= Load complete.  ============="
 	    echo "==========================================="
+
+        # remove the .load file once all parameters have been extracted from it
+        rm ${file}
+        rm ${LOAD_REQUEST_DIRECTORY}/dataloader.xml
 
 	    if [[ ${PIPESTATUS[0]} == 0 ]]
 	    then
