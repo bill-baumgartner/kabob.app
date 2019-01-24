@@ -154,6 +154,7 @@ EOF
 	    echo "==========================================="
 
         # remove the .load file once all parameters have been extracted from it
+        echo "Deleting load request: ${file}"
         rm ${file}
         rm ${LOAD_REQUEST_DIRECTORY}/dataloader.xml
 
