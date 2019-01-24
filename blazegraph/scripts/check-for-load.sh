@@ -156,7 +156,7 @@ EOF
         # remove the .load file once all parameters have been extracted from it
         echo "Deleting load request: ${path}${file}"
         rm ${path}${file}
-        rm ${LOAD_REQUEST_DIRECTORY}/dataloader.xml
+        #rm ${LOAD_REQUEST_DIRECTORY}/dataloader.xml
 
 	    if [[ ${PIPESTATUS[0]} == 0 ]]
 	    then
