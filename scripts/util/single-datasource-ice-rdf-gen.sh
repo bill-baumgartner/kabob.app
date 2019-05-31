@@ -21,7 +21,7 @@ TAX="-t 9606"
 MAVEN="/usr/bin/mvn"
 
 DID=""
-echo "Starting kabob-base container to process: $DATASOURCE_KEY"
+echo "Starting kabob-base container to process: $DATASOURCE_KEY (KB_KEY=${KB_KEY}; CONTAINER_VERSION=${CONTAINER_VERSION})"
 DID=${DID}" "`docker run -d --name "rdf_gen_${DATASOURCE_KEY}" --volumes-from kabob_data-$KB_KEY billbaumgartner/kabob-base:${CONTAINER_VERSION} ./ice-rdf-gen.sh "${TAX}" "${DATASOURCE_KEY}" "${MAVEN}" "${DATASOURCE_KEY}"`
 docker wait $DID
 docker rm $DID
